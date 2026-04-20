@@ -12,27 +12,32 @@ const template110Html = `
       style="width:100%;height:100%;border-radius:44px;object-fit:cover;"
     />
   </div>
-  <div style="position:absolute;top:250px;right:85px;background-color:#02879f;border-radius:15px;padding:50px 72px;z-index:1;">
-    <p style="font-family:'Vazirmatn','Nian',sans-serif;font-size:100px;line-height:1;color:white;margin:0;">{name}</p>
+  <div style="position:absolute;top:250px;right:85px;background-color:#02879f;border-radius:15px;padding:18px 34px;z-index:1;">
+    <p style="font-family:Nian-Black;font-size:100px;line-height:1;color:white;margin:10px 0 30px 0px;">{name}</p>
   </div>
   <div style="position:absolute;top:480px;right:85px;background-color:#02879f;border-radius:15px;padding:40px;z-index:1;">
-    <p style="font-family:'Vazirmatn','Nian',sans-serif;font-size:80px;line-height:1;color:white;margin:0;">{role}</p>
+    <p style="font-family:Nian-Black;font-size:80px;line-height:1;color:white;margin:0;">{role}</p>
   </div>
 </div>
 `;
 
 const template120Html = `
-<div style="width:1920px;height:1080px;position:relative;overflow:hidden;background:linear-gradient(135deg,#112031,#294a66);">
+<div style="width:1080px;height:1080px;position:relative;overflow:hidden;background:linear-gradient(135deg,#112031,#294a66);">
   <img
-    src="{image}"
-    alt="{name}"
-    style="position:absolute;left:120px;top:220px;width:420px;height:640px;border-radius:36px;object-fit:cover;border:10px solid rgba(255,255,255,0.4);"
+    src="{image1}"
+    alt="{name1}"
+    style="position:absolute;left:120px;top:220px;width:300px;height:400px;border-radius:36px;object-fit:cover;border:10px solid rgba(255,255,255,0.4);"
+  />
+  <img
+    src="{image2}"
+    alt="{name2}"
+    style="position:absolute;right:120px;bottom:220px;width:400px;height:300px;border-radius:36px;object-fit:cover;border:10px solid rgba(255,255,255,0.4);"
   />
   <div style="position:absolute;right:140px;top:270px;max-width:1100px;">
-    <p style="margin:0;color:#b3d8ff;font-family:'Vazirmatn',sans-serif;font-size:52px;">کارت معرفی</p>
-    <p style="margin:24px 0 0;color:#ffffff;font-family:'Vazirmatn',sans-serif;font-size:132px;line-height:1.05;">{name}</p>
-    <p style="margin:24px 0 0;color:#8fe6ff;font-family:'Vazirmatn',sans-serif;font-size:76px;">{role}</p>
-    <p style="margin:40px 0 0;color:#dbe8f3;font-family:'Vazirmatn',sans-serif;font-size:42px;">{tagline}</p>
+    <p style="margin:0;color:#b3d8ff;font-family:'Nian-Black',sans-serif;font-size:52px;">کارت معرفی</p>
+    <p style="margin:24px 0 0;color:#ffffff;font-family:'Nian-Black',sans-serif;font-size:132px;line-height:1.05;">{name}</p>
+    <p style="margin:24px 0 0;color:#8fe6ff;font-family:'Nian-Black',sans-serif;font-size:76px;">{role}</p>
+    <p style="margin:40px 0 0;color:#dbe8f3;font-family:'Nian-Black',sans-serif;font-size:42px;">{tagline}</p>
   </div>
 </div>
 `;
@@ -46,9 +51,9 @@ const template130Html = `
   />
   <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,0.35),rgba(15,23,42,0.92));"></div>
   <div style="position:absolute;right:120px;left:120px;bottom:110px;z-index:1;">
-    <p style="margin:0;color:#7dd3fc;font-family:'Vazirmatn',sans-serif;font-size:48px;">{category}</p>
-    <p style="margin:18px 0 0;color:#ffffff;font-family:'Vazirmatn',sans-serif;font-size:110px;line-height:1.15;">{title}</p>
-    <p style="margin:26px 0 0;color:#e2e8f0;font-family:'Vazirmatn',sans-serif;font-size:50px;">{subtitle}</p>
+    <p style="margin:0;color:#7dd3fc;font-family:'Nian-Black',sans-serif;font-size:48px;">{category}</p>
+    <p style="margin:18px 0 0;color:#ffffff;font-family:'Nian-Black',sans-serif;font-size:110px;line-height:1.15;">{title}</p>
+    <p style="margin:26px 0 0;color:#e2e8f0;font-family:'Nian-Black',sans-serif;font-size:50px;">{subtitle}</p>
   </div>
 </div>
 `;
@@ -86,6 +91,8 @@ export const templateConfigs = [
         accept: 'image/*',
         required: false,
         default: '/templates/110/bg.png',
+        width: 644,
+        height: 760,
       },
     ],
   },
@@ -94,7 +101,7 @@ export const templateConfigs = [
     name: 'کارت معرفی - یک خط توضیح',
     description: 'کارت معرفی با تصویر و توضیح کوتاه',
     category: 'معرفی',
-    width: 1920,
+    width: 1080,
     height: 1080,
     html: template120Html,
     inputs: [
@@ -107,11 +114,22 @@ export const templateConfigs = [
         default: 'خلق تجربه‌های یادگیری هوشمند برای نسل آینده',
       },
       {
-        name: 'image',
+        name: 'image1',
         type: 'image',
         label: 'تصویر',
         accept: 'image/*',
         default: '/templates/110/bg.png',
+        width: 300,
+        height: 400,
+      },
+      {
+        name: 'image2',
+        type: 'image',
+        label: 'تصویر',
+        accept: 'image/*',
+        default: '/templates/110/bg.png',
+        width: 400,
+        height: 300,
       },
     ],
   },
@@ -150,6 +168,8 @@ export const templateConfigs = [
         label: 'تصویر پس‌زمینه',
         accept: 'image/*',
         default: '/templates/110/bg.png',
+        width: 1920,
+        height: 1080,
       },
     ],
   },

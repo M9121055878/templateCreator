@@ -10,10 +10,11 @@ import { toast } from 'src/components/snackbar';
 
 import { exportTemplateNodeAsPng, exportTemplateNodeAsJpeg } from '../lib/export-image';
 
-export function ExportActions({ exportNode, template }) {
+export function ExportActions({ exportRef, template }) {
   const [loadingType, setLoadingType] = useState('');
 
   const handleExport = async (type) => {
+    const exportNode = exportRef?.current;
     if (!exportNode || !template) return;
 
     try {

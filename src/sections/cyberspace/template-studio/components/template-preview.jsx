@@ -66,17 +66,26 @@ export function TemplatePreview({ template, renderedHtml, exportRef }) {
       </CardContent>
 
       <Box
-        ref={exportRef}
         sx={{
-          left: -99999,
-          top: -99999,
-          width: template.width,
-          height: template.height,
           position: 'fixed',
+          bottom: 0,
+          right: 0,
+          width: 1,
+          height: 1,
+          overflow: 'hidden',
           pointerEvents: 'none',
+          opacity: 0,
         }}
-        dangerouslySetInnerHTML={{ __html: renderedHtml }}
-      />
+      >
+        <Box
+          ref={exportRef}
+          sx={{
+            width: template.width,
+            height: template.height,
+          }}
+          dangerouslySetInnerHTML={{ __html: renderedHtml }}
+        />
+      </Box>
     </Card>
   );
 }

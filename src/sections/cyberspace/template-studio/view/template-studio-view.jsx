@@ -58,7 +58,7 @@ export function TemplateStudioView() {
           </Typography>
         </Stack>
 
-        <ExportActions exportNode={exportNodeRef.current} template={activeTemplate} />
+        <ExportActions exportRef={exportNodeRef} template={activeTemplate} />
 
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 4 }}>

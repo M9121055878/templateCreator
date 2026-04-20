@@ -7,29 +7,87 @@ function downloadDataUrl(dataUrl, fileName) {
   anchor.click();
 }
 
+async function waitForFonts() {
+  if (document.fonts && document.fonts.ready) {
+    await document.fonts.ready;
+  }
+}
+
+async function preloadImages(node) {
+  const images = node.querySelectorAll('img');
+  const promises = Array.from(images).map((img) => {
+    if (!img.src || img.src.startsWith('data:')) return Promise.resolve();
+    return new Promise((resolve) => {
+      const newImg = new Image();
+      newImg.crossOrigin = 'anonymous';
+      newImg.onload = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = newImg.naturalWidth || img.width || 100;
+          canvas.height = newImg.naturalHeight || img.height || 100;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(newImg, 0, 0);
+          img.src = canvas.toDataURL('image/png');
+        } catch {
+          // Ignore CORS errors, keep original src
+        }
+        resolve();
+      };
+      newImg.onerror = () => resolve();
+      newImg.src = img.src;
+    });
+  });
+  await Promise.all(promises);
+}
+
+function delay(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 function buildFileName(template, format) {
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   return `template-${template.id}-${timestamp}.${format}`;
 }
 
 export async function exportTemplateNodeAsPng(node, template) {
+  await waitForFonts();
+  await preloadImages(node);
+  await delay(500);
+
   const dataUrl = await toPng(node, {
     cacheBust: true,
     pixelRatio: 1,
-    canvasWidth: template.width,
-    canvasHeight: template.height,
+    width: template.width,
+    height: template.height,
+    skipFonts: false,
+    style: {
+      transform: 'none',
+      transformOrigin: 'top left',
+    },
   });
 
   downloadDataUrl(dataUrl, buildFileName(template, 'png'));
 }
 
 export async function exportTemplateNodeAsJpeg(node, template) {
+  await waitForFonts();
+  await preloadImages(node);
+  await delay(500);
+
   const dataUrl = await toJpeg(node, {
     cacheBust: true,
     pixelRatio: 1,
     quality: 0.95,
-    canvasWidth: template.width,
-    canvasHeight: template.height,
+    width: template.width,
+    height: template.height,
+    backgroundColor: '#ffffff',
+    skipFonts: false,
+    style: {
+      transform: 'none',
+      transformOrigin: 'top left',
+    },
   });
 
   downloadDataUrl(dataUrl, buildFileName(template, 'jpg'));

@@ -20,8 +20,56 @@
 /** **************************************
 * Plugins
 *************************************** */
-/* scrollbar */
 @import './components/scrollbar/styles.css';
+
+/** **************************************
+* Custom Fonts
+*************************************** */
+@font-face {
+  font-family: 'IranText';
+  src: url('/fonts/IranText.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IranTitle';
+  src: url('/fonts/IranTitle.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nian';
+  src: url('/fonts/NianNormal.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nian';
+  src: url('/fonts/NianBold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Alias for Nian-Bold as Nian-Black for template usage */
+@font-face {
+  font-family: 'Nian-Black';
+  src: url('/fonts/NianBold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/** **************************************
+* Plugins
+*************************************** */
+/* scrollbar */
 
 /** **************************************
 * Baseline
