@@ -14,6 +14,12 @@ import InputLabel from '@mui/material/InputLabel';
 import CardContent from '@mui/material/CardContent';
 import FormControl from '@mui/material/FormControl';
 import Autocomplete from '@mui/material/Autocomplete';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import IconButton from '@mui/material/IconButton';
+import { Icon } from '@iconify/react';
 
 import { ImageCropModal } from '../../../../components/image-crop-modal/image-crop-modal';
 
@@ -34,19 +40,23 @@ export function TemplateForm({
   onInputChange,
   onResetValues,
 }) {
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState({ label: 'همه دسته‌ها', value: null });
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const [currentImageSrc, setCurrentImageSrc] = useState('');
   const [currentInputName, setCurrentInputName] = useState('');
   const [currentAspectRatio, setCurrentAspectRatio] = useState(undefined);
+  const [resetDialogOpen, setResetDialogOpen] = useState(false);
 
   const categories = useMemo(() => {
     const uniqueCategories = [...new Set(templates.map((t) => t.category))];
-    return uniqueCategories.map((cat) => ({ label: cat, value: cat }));
+    return [
+      { label: 'همه دسته‌ها', value: null },
+      ...uniqueCategories.map((cat) => ({ label: cat, value: cat }))
+    ];
   }, [templates]);
 
   const filteredTemplates = useMemo(() => {
-    if (!selectedCategory) return templates;
+    if (!selectedCategory || selectedCategory.value === null) return templates;
     return templates.filter((t) => t.category === selectedCategory.value);
   }, [templates, selectedCategory]);
 
@@ -67,12 +77,12 @@ export function TemplateForm({
     const dataUrl = await readFileAsDataUrl(file);
     setCurrentImageSrc(dataUrl);
     setCurrentInputName(inputName);
-    
+
     // Calculate aspect ratio from input configuration
     const input = activeTemplate?.inputs?.find(i => i.name === inputName);
     const aspectRatio = input?.width && input?.height ? input.width / input.height : undefined;
     setCurrentAspectRatio(aspectRatio);
-    
+
     setCropModalOpen(true);
   };
 
@@ -94,19 +104,33 @@ export function TemplateForm({
       <Card>
         <CardContent>
           <Stack spacing={2.5}>
-            <Typography variant="h6">تنظیمات تمپلیت</Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Typography variant="h6">تنظیمات تمپلیت</Typography>
+              <IconButton 
+                onClick={() => setResetDialogOpen(true)} 
+                color="error"
+                title="پاک کردن داده‌ها"
+              >
+                <Icon icon="solar:trash-bin-trash-bold" width={20} />
+              </IconButton>
+            </Box>
 
             <Autocomplete
               fullWidth
               options={categories}
               value={selectedCategory}
               onChange={(event, newValue) => {
-                setSelectedCategory(newValue);
+                setSelectedCategory(newValue || { label: 'همه دسته‌ها', value: null });
                 // Reset template selection when category changes
                 if (newValue && filteredTemplates.length > 0) {
                   const firstTemplateInCategory = templates.find((t) => t.category === newValue.value);
                   if (firstTemplateInCategory) {
                     onTemplateChange(firstTemplateInCategory.id);
+                  }
+                } else if (!newValue) {
+                  // If "All Categories" is selected, select the first template
+                  if (templates.length > 0) {
+                    onTemplateChange(templates[0].id);
                   }
                 }
               }}
@@ -193,12 +217,6 @@ export function TemplateForm({
                 />
               );
             })}
-
-            <Box sx={{ pt: 1 }}>
-              <Button onClick={onResetValues} variant="soft">
-                بازنشانی مقادیر
-              </Button>
-            </Box>
           </Stack>
         </CardContent>
       </Card>
@@ -210,6 +228,31 @@ export function TemplateForm({
         imageSrc={currentImageSrc}
         aspectRatio={currentAspectRatio}
       />
+
+      <Dialog open={resetDialogOpen} onClose={() => setResetDialogOpen(false)}>
+        <DialogTitle>تایید پاک کردن داده‌ها</DialogTitle>
+        <DialogContent>
+          <Typography>
+            آیا از پاک کردن تمام داده‌ها و بازگشت به مقادیر پیشفرض اطمینان دارید؟
+            این عمل قابل بازگشت نیست.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setResetDialogOpen(false)} variant="outlined">
+            انصراف
+          </Button>
+          <Button 
+            onClick={() => {
+              onResetValues();
+              setResetDialogOpen(false);
+            }} 
+            variant="contained" 
+            color="error"
+          >
+            پاک کردن داده‌ها
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

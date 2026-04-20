@@ -57,10 +57,10 @@ export const navData = [
       // { title: 'Two', path: paths.dashboard.two, icon: ICONS.ecommerce },
       // { title: 'Three', path: paths.dashboard.three, icon: ICONS.analytics },
       { 
-        title: 'Template Studio', 
+        title: 'عکس ساز', 
         path: paths.dashboard.templates, 
         icon: ICONS.file,
-        info: <Label>v0.1.0</Label>
+        info: <Label>v1.0</Label>
       },
     ],
   },

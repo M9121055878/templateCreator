@@ -62,10 +62,12 @@ export const templateConfigs = [
   {
     id: '110',
     name: 'قالب گواهی - دو خط',
-    description: 'قالب با نام، سمت و تصویر',
+    description: 'قالب 110 با نام، سمت و تصویر',
     category: 'انتصابات',
     width: 1920,
     height: 1080,
+    hasTransparency: false,
+    recommendedFormat: 'jpg',
     html: template110Html,
     inputs: [
       {
@@ -103,6 +105,8 @@ export const templateConfigs = [
     category: 'معرفی',
     width: 1080,
     height: 1080,
+    hasTransparency: true,
+    recommendedFormat: 'png',
     html: template120Html,
     inputs: [
       { name: 'name', type: 'text', label: 'نام', default: 'سارا محمدی', required: true },
@@ -140,6 +144,8 @@ export const templateConfigs = [
     category: 'رسانه',
     width: 1920,
     height: 1080,
+    hasTransparency: false,
+    recommendedFormat: 'jpg',
     html: template130Html,
     inputs: [
       {

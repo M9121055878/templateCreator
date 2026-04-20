@@ -51,14 +51,14 @@ function buildFileName(template, format) {
   return `template-${template.id}-${timestamp}.${format}`;
 }
 
-export async function exportTemplateNodeAsPng(node, template) {
+export async function exportTemplateNodeAsPng(node, template, options = {}) {
   await waitForFonts();
   await preloadImages(node);
   await delay(500);
 
   const dataUrl = await toPng(node, {
     cacheBust: true,
-    pixelRatio: 1,
+    pixelRatio: options.pixelRatio || 1,
     width: template.width,
     height: template.height,
     skipFonts: false,
@@ -68,10 +68,14 @@ export async function exportTemplateNodeAsPng(node, template) {
     },
   });
 
+  if (options.skipDownload) {
+    return dataUrl;
+  }
+
   downloadDataUrl(dataUrl, buildFileName(template, 'png'));
 }
 
-export async function exportTemplateNodeAsJpeg(node, template) {
+export async function exportTemplateNodeAsJpeg(node, template, options = {}) {
   await waitForFonts();
   await preloadImages(node);
   await delay(500);
@@ -79,7 +83,7 @@ export async function exportTemplateNodeAsJpeg(node, template) {
   const dataUrl = await toJpeg(node, {
     cacheBust: true,
     pixelRatio: 1,
-    quality: 0.95,
+    quality: options.quality || 0.95,
     width: template.width,
     height: template.height,
     backgroundColor: '#ffffff',
@@ -89,6 +93,10 @@ export async function exportTemplateNodeAsJpeg(node, template) {
       transformOrigin: 'top left',
     },
   });
+
+  if (options.skipDownload) {
+    return dataUrl;
+  }
 
   downloadDataUrl(dataUrl, buildFileName(template, 'jpg'));
 }
