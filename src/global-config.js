@@ -14,7 +14,7 @@ export const UI_CONFIG = {
   settings: false,
   account: false,
   mobileOnly: false,
-}
+};
 
 export const CONFIG = {
   appName: 'Minimal UI',

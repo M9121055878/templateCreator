@@ -30,7 +30,6 @@ export function BlankView({ title = 'Blank', description, sx }) {
     <DashboardContent maxWidth="xl">
       <Typography variant="h4"> {title} </Typography>
       {description && <Typography sx={{ mt: 1 }}> {description} </Typography>}
-
       {renderContent()}
     </DashboardContent>
   );

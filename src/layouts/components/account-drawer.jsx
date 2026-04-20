@@ -121,7 +121,7 @@ export function AccountDrawer({ data = [], sx, ...other }) {
         onClose={onClose}
         anchor="right"
         ModalProps={{
-          container: () => null
+          container: () => null,
         }}
         slotProps={{
           backdrop: { invisible: true },

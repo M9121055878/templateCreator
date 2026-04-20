@@ -96,7 +96,7 @@ Components receive data via props from the parent view. They should NOT fetch da
 const { data } = useQuery({ queryKey: ['analytics'], queryFn: fetchAnalytics });
 
 // Component receives props
-<AnalyticsSummary title="بازدید" total={data?.viewCount} icon="solar:eye-bold" />
+<AnalyticsSummary title="بازدید" total={data?.viewCount} icon="solar:eye-bold" />;
 ```
 
 ## Barrel Export

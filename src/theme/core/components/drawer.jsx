@@ -7,8 +7,8 @@ import { UI_CONFIG } from 'src/global-config';
 const MuiDrawer = {
   defaultProps: {
     ModalProps: {
-      container: () => UI_CONFIG.mobileOnly ? document.getElementById('drawer-container') : null
-    }
+      container: () => (UI_CONFIG.mobileOnly ? document.getElementById('drawer-container') : null),
+    },
   },
   // ▼▼▼▼▼▼▼▼ 🎨 STYLE ▼▼▼▼▼▼▼▼
   styleOverrides: {
