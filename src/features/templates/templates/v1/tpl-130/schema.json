@@ -1,0 +1,8 @@
+{
+  "inputs": [
+    { "key": "category", "type": "text", "label": "دسته‌بندی", "required": true, "default": "اطلاعیه ویژه" },
+    { "key": "title", "type": "text", "label": "تیتر", "required": true, "default": "ثبت‌نام دوره جدید آغاز شد" },
+    { "key": "subtitle", "type": "text", "label": "زیرتیتر", "default": "برای دریافت اطلاعات بیشتر به سایت مراجعه کنید" },
+    { "key": "image", "type": "image", "label": "تصویر پس‌زمینه", "default": "/templates/110/bg.png", "accept": "image/*", "crop": { "w": 1920, "h": 1080 } }
+  ]
+}

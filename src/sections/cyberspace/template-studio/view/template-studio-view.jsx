@@ -7,37 +7,47 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { DashboardContent } from 'src/layouts/dashboard';
+import {
+  TEMPLATE_ENGINES,
+  getTemplateRegistry,
+  renderTemplateContent,
+  resolveTemplateRuntime,
+  buildInitialValuesFromTemplate,
+} from 'src/features/templates';
 
-import { templateConfigs } from '../data/templates';
 import { TemplateForm } from '../components/template-form';
 import { ExportActions } from '../components/export-actions';
 import { TemplatePreview } from '../components/template-preview';
-import { renderTemplateHtml, createInitialValues } from '../lib/render-template';
 
 export function TemplateStudioView() {
-  const [activeTemplateId, setActiveTemplateId] = useState(templateConfigs[0].id);
+  const templates = useMemo(() => getTemplateRegistry(), []);
+  const [activeTemplateId, setActiveTemplateId] = useState(templates[0].id);
   const [templateValues, setTemplateValues] = useState(() =>
-    createInitialValues(templateConfigs[0])
+    buildInitialValuesFromTemplate(templates[0].document)
   );
   const exportNodeRef = useRef(null);
 
   const activeTemplate = useMemo(
-    () =>
-      templateConfigs.find((template) => template.id === activeTemplateId) ?? templateConfigs[0],
-    [activeTemplateId]
+    () => templates.find((template) => template.id === activeTemplateId) ?? templates[0],
+    [activeTemplateId, templates]
   );
 
-  const renderedHtml = useMemo(
-    () => renderTemplateHtml(activeTemplate, templateValues),
+  const runtimeData = useMemo(
+    () => resolveTemplateRuntime(activeTemplate.document, templateValues),
     [activeTemplate, templateValues]
   );
 
+  const renderedContent = useMemo(
+    () => renderTemplateContent(activeTemplate, runtimeData),
+    [activeTemplate, runtimeData]
+  );
+
   const handleTemplateChange = (templateId) => {
-    const nextTemplate = templateConfigs.find((template) => template.id === templateId);
+    const nextTemplate = templates.find((template) => template.id === templateId);
     if (!nextTemplate) return;
 
     setActiveTemplateId(nextTemplate.id);
-    setTemplateValues(createInitialValues(nextTemplate));
+    setTemplateValues(buildInitialValuesFromTemplate(nextTemplate.document));
   };
 
   const handleInputChange = (inputName, value) => {
@@ -45,7 +55,7 @@ export function TemplateStudioView() {
   };
 
   const handleResetValues = () => {
-    setTemplateValues(createInitialValues(activeTemplate));
+    setTemplateValues(buildInitialValuesFromTemplate(activeTemplate.document));
   };
 
   return (
@@ -67,15 +77,16 @@ export function TemplateStudioView() {
               onInputChange={handleInputChange}
               onResetValues={handleResetValues}
               onTemplateChange={handleTemplateChange}
-              templates={templateConfigs}
+              templates={templates}
               values={templateValues}
             />
           </Grid>
 
           <Grid size={{ xs: 12, md: 8 }}>
             <TemplatePreview
+              engine={activeTemplate.engine ?? TEMPLATE_ENGINES.LEGACY_HTML}
               exportRef={exportNodeRef}
-              renderedHtml={renderedHtml}
+              renderedContent={renderedContent}
               template={activeTemplate}
             />
           </Grid>

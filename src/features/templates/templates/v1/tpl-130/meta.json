@@ -1,0 +1,14 @@
+{
+  "id": "tpl-130",
+  "version": "1.0.0",
+  "status": "active",
+  "engine": "dsl-v1",
+  "meta": {
+    "title": "بنر شبکه اجتماعی",
+    "category": "social-media",
+    "size": { "width": 1920, "height": 1080 },
+    "recommendedFormat": "jpg",
+    "hasTransparency": false,
+    "tags": ["banner", "social"]
+  }
+}

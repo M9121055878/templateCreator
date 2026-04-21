@@ -8,7 +8,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 
-export function TemplatePreview({ template, renderedHtml, exportRef }) {
+import { TEMPLATE_ENGINES } from 'src/features/templates';
+
+export function TemplatePreview({ template, renderedContent, engine, exportRef }) {
   const previewContainerRef = useRef(null);
   const [previewWidth, setPreviewWidth] = useState(960);
 
@@ -58,8 +60,13 @@ export function TemplatePreview({ template, renderedHtml, exportRef }) {
                   transform: `scale(${scale})`,
                   transformOrigin: 'top left',
                 }}
-                dangerouslySetInnerHTML={{ __html: renderedHtml }}
-              />
+              >
+                {engine === TEMPLATE_ENGINES.LEGACY_HTML ? (
+                  <Box dangerouslySetInnerHTML={{ __html: renderedContent ?? '' }} />
+                ) : (
+                  renderedContent
+                )}
+              </Box>
             </Box>
           </Box>
         </Stack>
@@ -83,8 +90,13 @@ export function TemplatePreview({ template, renderedHtml, exportRef }) {
             width: template.width,
             height: template.height,
           }}
-          dangerouslySetInnerHTML={{ __html: renderedHtml }}
-        />
+        >
+          {engine === TEMPLATE_ENGINES.LEGACY_HTML ? (
+            <Box dangerouslySetInnerHTML={{ __html: renderedContent ?? '' }} />
+          ) : (
+            renderedContent
+          )}
+        </Box>
       </Box>
     </Card>
   );

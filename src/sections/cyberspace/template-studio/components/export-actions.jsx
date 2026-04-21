@@ -17,9 +17,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import { toast } from 'src/components/snackbar';
+import { exportTemplateNodeAsPng, exportTemplateNodeAsJpeg } from 'src/features/templates';
 
-import { exportTemplateNodeAsPng, exportTemplateNodeAsJpeg } from '../lib/export-image';
+import { toast } from 'src/components/snackbar';
 
 export function ExportActions({ exportRef, template }) {
   const [loadingType, setLoadingType] = useState('');

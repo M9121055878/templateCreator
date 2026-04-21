@@ -1,0 +1,7 @@
+{
+  "inputs": [
+    { "key": "name", "type": "text", "label": "نام", "required": true, "default": "مجید گودینی", "maxLength": 60 },
+    { "key": "role", "type": "text", "label": "سمت", "required": true, "default": "ریاست مدرسه تحول", "maxLength": 80 },
+    { "key": "image", "type": "image", "label": "تصویر", "required": false, "default": "/templates/110/bg.png", "crop": { "w": 644, "h": 760 }, "accept": "image/*" }
+  ]
+}

@@ -40,6 +40,7 @@ export function TemplateForm({
   onInputChange,
   onResetValues,
 }) {
+  const getInputKey = (input) => input.name ?? input.key;
   const [selectedCategory, setSelectedCategory] = useState({ label: 'همه دسته‌ها', value: null });
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const [currentImageSrc, setCurrentImageSrc] = useState('');
@@ -79,7 +80,7 @@ export function TemplateForm({
     setCurrentInputName(inputName);
 
     // Calculate aspect ratio from input configuration
-    const input = activeTemplate?.inputs?.find(i => i.name === inputName);
+    const input = activeTemplate?.inputs?.find((i) => getInputKey(i) === inputName);
     const aspectRatio = input?.width && input?.height ? input.width / input.height : undefined;
     setCurrentAspectRatio(aspectRatio);
 
@@ -161,25 +162,26 @@ export function TemplateForm({
             )}
 
             {activeTemplate?.inputs?.map((input) => {
+              const inputKey = getInputKey(input);
               if (input.type === 'image') {
                 return (
-                  <Stack key={input.name} spacing={1}>
+                  <Stack key={inputKey} spacing={1}>
                     <Typography variant="subtitle2">{input.label}</Typography>
                     <Button component="label" variant="outlined">
                       آپلود تصویر
                       <input
                         accept={input.accept ?? 'image/*'}
                         hidden
-                        onChange={(event) => handleFileChange(event, input.name)}
+                        onChange={(event) => handleFileChange(event, inputKey)}
                         type="file"
                       />
                     </Button>
                     <TextField
                       fullWidth
                       label="یا لینک تصویر"
-                      onChange={(event) => onInputChange(input.name, event.target.value)}
+                      onChange={(event) => onInputChange(inputKey, event.target.value)}
                       placeholder={input.default ?? ''}
-                      value={values[input.name] ?? ''}
+                      value={values[inputKey] ?? ''}
                     />
                   </Stack>
                 );
@@ -187,13 +189,13 @@ export function TemplateForm({
 
               if (input.type === 'select') {
                 return (
-                  <FormControl fullWidth key={input.name}>
-                    <InputLabel id={`${input.name}-label`}>{input.label}</InputLabel>
+                  <FormControl fullWidth key={inputKey}>
+                    <InputLabel id={`${inputKey}-label`}>{input.label}</InputLabel>
                     <Select
                       label={input.label}
-                      labelId={`${input.name}-label`}
-                      onChange={(event) => onInputChange(input.name, event.target.value)}
-                      value={values[input.name] ?? input.default ?? ''}
+                      labelId={`${inputKey}-label`}
+                      onChange={(event) => onInputChange(inputKey, event.target.value)}
+                      value={values[inputKey] ?? input.default ?? ''}
                     >
                       {(input.options ?? []).map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -208,12 +210,12 @@ export function TemplateForm({
               return (
                 <TextField
                   fullWidth
-                  key={input.name}
+                  key={inputKey}
                   label={input.label}
-                  onChange={(event) => onInputChange(input.name, event.target.value)}
+                  onChange={(event) => onInputChange(inputKey, event.target.value)}
                   placeholder={input.placeholder ?? ''}
                   required={Boolean(input.required)}
-                  value={values[input.name] ?? ''}
+                  value={values[inputKey] ?? ''}
                 />
               );
             })}

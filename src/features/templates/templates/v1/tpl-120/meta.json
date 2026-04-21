@@ -1,0 +1,14 @@
+{
+  "id": "tpl-120",
+  "version": "1.0.0",
+  "status": "active",
+  "engine": "dsl-v1",
+  "meta": {
+    "title": "کارت معرفی - یک خط توضیح",
+    "category": "introduction",
+    "size": { "width": 1080, "height": 1080 },
+    "recommendedFormat": "png",
+    "hasTransparency": true,
+    "tags": ["intro", "card"]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "root": {
+    "type": "frame",
+    "id": "root",
+    "x": 0,
+    "y": 0,
+    "w": 1920,
+    "h": 1080,
+    "style": { "backgroundColor": "#f5f5f5", "overflow": "hidden" },
+    "children": ["bg", "photo-box", "name-badge", "role-badge"]
+  },
+  "nodes": {
+    "bg": { "type": "image", "id": "bg", "x": 0, "y": 0, "w": 1920, "h": 1080, "src": "{{asset.bg}}", "style": { "objectFit": "cover" } },
+    "photo-box": { "type": "image", "id": "photo-box", "x": 106, "y": 147, "w": 644, "h": 760, "src": "{{input.image}}", "style": { "borderRadius": 44, "objectFit": "cover" } },
+    "name-badge": { "type": "text", "id": "name-badge", "x": 1188, "y": 250, "w": 650, "h": 190, "text": "{{input.name}}", "style": { "fontFamily": "Nian-Black", "fontSize": 100, "lineHeight": 1, "color": "#fff", "backgroundColor": "#02879f", "borderRadius": 15, "padding": "18px 34px" } },
+    "role-badge": { "type": "text", "id": "role-badge", "x": 1188, "y": 480, "w": 650, "h": 200, "text": "{{input.role}}", "style": { "fontFamily": "Nian-Black", "fontSize": 80, "lineHeight": 1, "color": "#fff", "backgroundColor": "#02879f", "borderRadius": 15, "padding": 40 } }
+  }
+}

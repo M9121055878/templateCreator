@@ -1,0 +1,9 @@
+{
+  "inputs": [
+    { "key": "name", "type": "text", "label": "نام", "required": true, "default": "سارا محمدی" },
+    { "key": "role", "type": "text", "label": "سمت", "required": true, "default": "مدیر توسعه محصول" },
+    { "key": "tagline", "type": "text", "label": "توضیح کوتاه", "default": "خلق تجربه‌های یادگیری هوشمند برای نسل آینده" },
+    { "key": "image1", "type": "image", "label": "تصویر", "default": "/templates/110/bg.png", "accept": "image/*", "crop": { "w": 300, "h": 400 } },
+    { "key": "image2", "type": "image", "label": "تصویر", "default": "/templates/110/bg.png", "accept": "image/*", "crop": { "w": 400, "h": 300 } }
+  ]
+}

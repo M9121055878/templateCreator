@@ -1,0 +1,19 @@
+{
+  "root": {
+    "type": "frame",
+    "id": "root",
+    "x": 0,
+    "y": 0,
+    "w": 1920,
+    "h": 1080,
+    "style": { "backgroundColor": "#0f172a", "overflow": "hidden" },
+    "children": ["bg", "overlay", "category", "title", "subtitle"]
+  },
+  "nodes": {
+    "bg": { "type": "image", "id": "bg", "x": 0, "y": 0, "w": 1920, "h": 1080, "src": "{{input.image}}", "style": { "objectFit": "cover", "opacity": 0.5 } },
+    "overlay": { "type": "shape", "id": "overlay", "shape": "rectangle", "x": 0, "y": 0, "w": 1920, "h": 1080, "style": { "backgroundColor": "rgba(15,23,42,0.75)" } },
+    "category": { "type": "text", "id": "category", "x": 120, "y": 760, "w": 1680, "h": 70, "text": "{{input.category}}", "style": { "fontFamily": "Nian-Black", "fontSize": 48, "color": "#7dd3fc" } },
+    "title": { "type": "text", "id": "title", "x": 120, "y": 840, "w": 1680, "h": 150, "text": "{{input.title}}", "style": { "fontFamily": "Nian-Black", "fontSize": 110, "lineHeight": 1.15, "color": "#ffffff" } },
+    "subtitle": { "type": "text", "id": "subtitle", "x": 120, "y": 980, "w": 1680, "h": 70, "text": "{{input.subtitle}}", "style": { "fontFamily": "Nian-Black", "fontSize": 50, "color": "#e2e8f0" } }
+  }
+}
