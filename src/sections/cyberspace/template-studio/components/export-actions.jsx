@@ -2,20 +2,20 @@
 
 import { useState } from 'react';
 
+import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import Radio from '@mui/material/Radio';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
-import LoadingButton from '@mui/lab/LoadingButton';
 import Dialog from '@mui/material/Dialog';
+import Slider from '@mui/material/Slider';
+import Typography from '@mui/material/Typography';
+import RadioGroup from '@mui/material/RadioGroup';
+import LoadingButton from '@mui/lab/LoadingButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import Typography from '@mui/material/Typography';
-import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Radio from '@mui/material/Radio';
-import Slider from '@mui/material/Slider';
-import Box from '@mui/material/Box';
-import Alert from '@mui/material/Alert';
 
 import { toast } from 'src/components/snackbar';
 
@@ -25,7 +25,7 @@ export function ExportActions({ exportRef, template }) {
   const [loadingType, setLoadingType] = useState('');
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const [exportFormat, setExportFormat] = useState(template?.recommendedFormat || 'jpg');
-  const [jpgQuality, setJpgQuality] = useState(0.5);
+  const [jpgQuality, setJpgQuality] = useState(0.7);
 
   const handleExport = async (format, quality = 0.8) => {
     const exportNode = exportRef?.current;
@@ -134,19 +134,18 @@ export function ExportActions({ exportRef, template }) {
                   میزان کیفیت: {Math.round(jpgQuality * 100)}%
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                 ⚠️ اگر با کیفیت‌های ذخیره‌سازی آشنایی ندارید، روی پیشفرض: معمولی (50%) بگذارید.
+                 ⚠️ اگر با کیفیت‌های ذخیره‌سازی آشنایی ندارید، روی پیشفرض: متوسط (70%) بگذارید.
                 </Typography>
                 <Slider
                   value={jpgQuality}
                   onChange={(e, value) => setJpgQuality(value)}
-                  min={0.3}
+                  min={0.5}
                   max={0.9}
                   step={0.1}
                   marks={[
-                    { value: 0.3, label: 'کم' },
-                    { value: 0.5, label: 'معمولی' },
-                    { value: 0.7, label: 'زیاد' },
-                    { value: 0.9, label: 'عالی' }
+                    { value: 0.5, label: 'کم' },
+                    { value: 0.7, label: 'متوسط' },
+                    { value: 0.9, label: 'زیاد' }
                   ]}
                   valueLabelDisplay="auto"
                   valueLabelFormat={(value) => `${Math.round(value * 100)}%`}

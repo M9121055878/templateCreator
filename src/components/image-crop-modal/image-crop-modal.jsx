@@ -1,16 +1,17 @@
 'use client';
 
+import 'react-image-crop/dist/ReactCrop.css';
+
 import { useState } from 'react';
 import ReactCrop from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import Typography from '@mui/material/Typography';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import Typography from '@mui/material/Typography';
 
 // ----------------------------------------------------------------------
 
@@ -40,8 +41,8 @@ export function ImageCropModal({ open, onClose, onCropComplete, imageSrc, aspect
     setCrop(initialCrop);
   };
 
-  const handleCropComplete = (crop) => {
-    setCompletedCrop(crop);
+  const handleCropComplete = (nextCrop) => {
+    setCompletedCrop(nextCrop);
   };
 
   const handleConfirmCrop = () => {

@@ -10,7 +10,6 @@ import {
   RHFDatePicker,
   RHFTimePicker,
   RHFDateTimePicker,
-  RHFMobileDatePicker,
   RHFMobileDateTimePicker,
 } from './rhf-date-picker';
 

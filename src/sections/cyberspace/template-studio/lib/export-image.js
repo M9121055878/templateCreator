@@ -73,6 +73,7 @@ export async function exportTemplateNodeAsPng(node, template, options = {}) {
   }
 
   downloadDataUrl(dataUrl, buildFileName(template, 'png'));
+  return dataUrl;
 }
 
 export async function exportTemplateNodeAsJpeg(node, template, options = {}) {
@@ -99,4 +100,5 @@ export async function exportTemplateNodeAsJpeg(node, template, options = {}) {
   }
 
   downloadDataUrl(dataUrl, buildFileName(template, 'jpg'));
+  return dataUrl;
 }
