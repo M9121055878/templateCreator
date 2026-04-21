@@ -41,6 +41,16 @@ export function AuthProvider({ children }) {
     }
   }, [setState]);
 
+  const signOut = useCallback(async () => {
+    try {
+      await setSession(null);
+      setState({ user: null, loading: false });
+    } catch (error) {
+      console.error(error);
+      setState({ user: null, loading: false });
+    }
+  }, [setState]);
+
   useEffect(() => {
     checkUserSession();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,13 +64,20 @@ export function AuthProvider({ children }) {
 
   const memoizedValue = useMemo(
     () => ({
-      user: state.user ? { ...state.user, role: state.user?.role ?? 'admin' } : null,
+      user: state.user,
       checkUserSession,
+      signOut,
       loading: status === 'loading',
       authenticated: status === 'authenticated',
       unauthenticated: status === 'unauthenticated',
+      hasPermission: (permission) => {
+        if (!state.user?.role?.permissions) return false;
+        return state.user.role.permissions.includes(permission);
+      },
+      isAdmin: state.user?.role?.name === 'admin',
+      isCompanyAdmin: state.user?.role?.name === 'company_admin',
     }),
-    [checkUserSession, state.user, status]
+    [checkUserSession, signOut, state.user, status]
   );
 
   return <AuthContext value={memoizedValue}>{children}</AuthContext>;

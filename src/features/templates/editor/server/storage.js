@@ -34,6 +34,9 @@ function rowToDocument(row) {
     inputs: JSON.parse(row.inputs_json),
     layout: JSON.parse(row.layout_json),
     assets: JSON.parse(row.assets_json),
+    visibility_type: row.visibility_type,
+    company_id: row.company_id,
+    group_id: row.group_id,
   });
 }
 
@@ -47,6 +50,9 @@ function documentToRow(document) {
     inputs_json: JSON.stringify(document.inputs ?? []),
     layout_json: JSON.stringify(document.layout ?? {}),
     assets_json: JSON.stringify(document.assets ?? {}),
+    visibility_type: document.visibility_type || 'all_companies',
+    company_id: document.company_id || null,
+    group_id: document.group_id || null,
   };
 }
 
@@ -88,9 +94,36 @@ export async function readTemplateDocument(templateId) {
   return rowToDocument(row);
 }
 
-export async function listTemplateDocuments() {
+export async function listTemplateDocuments(options = {}) {
+  const { companyId, groupId, isAdmin } = options;
   const db = getEditorDb();
-  const rows = db.prepare('SELECT * FROM templates ORDER BY id ASC').all();
+  
+  let query = 'SELECT * FROM templates WHERE 1=1';
+  const params = [];
+
+  // If not admin, filter by visibility
+  if (!isAdmin) {
+    // Templates visible to all companies
+    query += ' AND (visibility_type = ?';
+    params.push('all_companies');
+    
+    // Templates visible to user's company
+    if (companyId) {
+      query += ' OR (visibility_type = ? AND company_id = ?)';
+      params.push('specific_company', companyId);
+      
+      // Templates visible to user's group within their company
+      if (groupId) {
+        query += ' OR (visibility_type = ? AND company_id = ? AND group_id = ?)';
+        params.push('specific_group', companyId, groupId);
+      }
+    }
+    
+    query += ')';
+  }
+  
+  query += ' ORDER BY id ASC';
+  const rows = db.prepare(query).all(...params);
 
   return rows
     .map((row) => rowToDocument(row))
@@ -109,8 +142,9 @@ export async function writeTemplateDocument(document) {
       INSERT INTO templates (
         id, version, status, engine,
         meta_json, inputs_json, layout_json, assets_json,
+        visibility_type, company_id, group_id,
         created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(id) DO UPDATE SET
         version = excluded.version,
         status = excluded.status,
@@ -119,6 +153,9 @@ export async function writeTemplateDocument(document) {
         inputs_json = excluded.inputs_json,
         layout_json = excluded.layout_json,
         assets_json = excluded.assets_json,
+        visibility_type = excluded.visibility_type,
+        company_id = excluded.company_id,
+        group_id = excluded.group_id,
         updated_at = excluded.updated_at
       `
     ).run(
@@ -130,6 +167,9 @@ export async function writeTemplateDocument(document) {
       payload.inputs_json,
       payload.layout_json,
       payload.assets_json,
+      payload.visibility_type,
+      payload.company_id,
+      payload.group_id,
       timestamp,
       timestamp
     );

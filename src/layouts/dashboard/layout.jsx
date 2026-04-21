@@ -7,13 +7,15 @@ import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 import { iconButtonClasses } from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 
 import { _contacts, _notifications } from 'src/_mock';
 
 import { Logo } from 'src/components/logo';
 import { useSettingsContext } from 'src/components/settings';
 
-import { useMockedUser } from 'src/auth/hooks';
+import { useAuthContext } from 'src/auth/hooks/use-auth-context';
 
 import { NavMobile } from './nav-mobile';
 import { VerticalDivider } from './content';
@@ -39,7 +41,7 @@ import { MainSection, layoutClasses, HeaderSection, LayoutSection } from '../cor
 export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery = 'lg' }) {
   const theme = useTheme();
 
-  const { user } = useMockedUser();
+  const { user, isAdmin } = useAuthContext();
 
   const settings = useSettingsContext();
 
@@ -53,7 +55,11 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
   const isNavHorizontal = settings.state.navLayout === 'horizontal';
   const isNavVertical = isNavMini || settings.state.navLayout === 'vertical';
 
-  const canDisplayItemByRole = (allowedRoles) => !allowedRoles?.includes(user?.role);
+  const canDisplayItemByRole = (allowedRoles) => {
+    if (!allowedRoles || allowedRoles.length === 0) return true;
+    if (isAdmin) return true;
+    return allowedRoles?.includes(user?.role?.name);
+  };
 
   const renderHeader = () => {
     const headerSlotProps = {
@@ -181,6 +187,19 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
           settings.state.navLayout === 'vertical' ? 'mini' : 'vertical'
         )
       }
+      slots={{
+        bottomArea: !isNavMini && user ? (
+          <Box sx={{ px: 2, pb: 2 }}>
+            <Divider sx={{ mb: 2 }} />
+            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+              نام نمایشی
+            </Typography>
+            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+              {user.firstName} {user.lastName}
+            </Typography>
+          </Box>
+        ) : null,
+      }}
     />
   );
 

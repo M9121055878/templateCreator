@@ -47,6 +47,11 @@ export const paths = {
     three: `${ROOTS.DASHBOARD}/three`,
     templates: `${ROOTS.DASHBOARD}/templates`,
     themeBuilder: `${ROOTS.DASHBOARD}/theme-builder`,
+    users: `${ROOTS.DASHBOARD}/users`,
+    roles: `${ROOTS.DASHBOARD}/roles`,
+    companies: `${ROOTS.DASHBOARD}/companies`,
+    groups: `${ROOTS.DASHBOARD}/groups`,
+    profile: `${ROOTS.DASHBOARD}/profile`,
     group: {
       root: `${ROOTS.DASHBOARD}/group`,
       five: `${ROOTS.DASHBOARD}/group/five`,

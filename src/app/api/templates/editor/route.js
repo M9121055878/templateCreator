@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { verify } from 'jsonwebtoken';
 
 import {
   getNextTemplateId,
@@ -10,9 +11,28 @@ import {
 
 export const runtime = 'nodejs';
 
-export async function GET() {
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+
+export async function GET(request) {
   try {
-    const documents = await listTemplateDocuments();
+    const authHeader = request.headers.get('authorization');
+    let userContext = { isAdmin: false, companyId: null, groupId: null };
+    
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.substring(7);
+        const decoded = verify(token, JWT_SECRET);
+        userContext = {
+          isAdmin: decoded.role === 'admin',
+          companyId: decoded.companyId || null,
+          groupId: decoded.groupId || null,
+        };
+      } catch (error) {
+        // Invalid token, proceed without context
+      }
+    }
+
+    const documents = await listTemplateDocuments(userContext);
 
     return NextResponse.json({
       templates: documents.map((document) => ({
@@ -21,6 +41,7 @@ export async function GET() {
         category: document.meta.category,
         status: document.status,
         size: document.meta.size,
+        visibility_type: document.visibility_type,
       })),
     });
   } catch (error) {

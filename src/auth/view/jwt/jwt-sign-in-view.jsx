@@ -28,10 +28,10 @@ import { signInWithPassword } from '../../context/jwt';
 // ----------------------------------------------------------------------
 
 export const SignInSchema = zod.object({
-  email: zod
+  username: zod
     .string()
-    .min(1, { message: 'Email is required!' })
-    .email({ message: 'Email must be a valid email address!' }),
+    .min(1, { message: 'Username is required!' })
+    .min(3, { message: 'Username must be at least 3 characters!' }),
   password: zod
     .string()
     .min(1, { message: 'Password is required!' })
@@ -50,8 +50,8 @@ export function JwtSignInView() {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const defaultValues = {
-    email: 'demo@minimals.cc',
-    password: '@2Minimal',
+    username: '',
+    password: '',
   };
 
   const methods = useForm({
@@ -66,12 +66,13 @@ export function JwtSignInView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await signInWithPassword({ email: data.email, password: data.password });
+      console.log('Form submitting with:', data);
+      await signInWithPassword({ username: data.username, password: data.password });
       await checkUserSession?.();
 
       router.refresh();
     } catch (error) {
-      console.error(error);
+      console.error('Form submission error:', error);
       const feedbackMessage = getErrorMessage(error);
       setErrorMessage(feedbackMessage);
     }
@@ -79,19 +80,9 @@ export function JwtSignInView() {
 
   const renderForm = () => (
     <Box sx={{ gap: 3, display: 'flex', flexDirection: 'column' }}>
-      <Field.Text name="email" label="Email address" slotProps={{ inputLabel: { shrink: true } }} />
+      <Field.Text name="username" label="Username" slotProps={{ inputLabel: { shrink: true } }} />
 
       <Box sx={{ gap: 1.5, display: 'flex', flexDirection: 'column' }}>
-        <Link
-          component={RouterLink}
-          href="#"
-          variant="body2"
-          color="inherit"
-          sx={{ alignSelf: 'flex-end' }}
-        >
-          Forgot password?
-        </Link>
-
         <Field.Text
           name="password"
           label="Password"
@@ -123,7 +114,7 @@ export function JwtSignInView() {
         loading={isSubmitting}
         loadingIndicator="Sign in..."
       >
-        Sign in
+        ورود
       </Button>
     </Box>
   );
@@ -131,23 +122,10 @@ export function JwtSignInView() {
   return (
     <>
       <FormHead
-        title="Sign in to your account"
-        description={
-          <>
-            {`Don’t have an account? `}
-            <Link component={RouterLink} href={paths.auth.jwt.signUp} variant="subtitle2">
-              Get started
-            </Link>
-          </>
-        }
+        title="ورود به حساب کاربری"
+        description="نام کاربری و رمز عبور خود را وارد کنید"
         sx={{ textAlign: { xs: 'center', md: 'left' } }}
       />
-
-      <Alert severity="info" sx={{ mb: 3 }}>
-        Use <strong>{defaultValues.email}</strong>
-        {' with password '}
-        <strong>{defaultValues.password}</strong>
-      </Alert>
 
       {!!errorMessage && (
         <Alert severity="error" sx={{ mb: 3 }}>

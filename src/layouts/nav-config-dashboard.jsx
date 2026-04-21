@@ -48,17 +48,14 @@ export const navData = [
   {
     subheader: 'Overview',
     items: [
-      // {
-      //   title: 'One',
-      //   path: paths.dashboard.root,
-      //   icon: ICONS.dashboard,
-      //   info: <Label>v{CONFIG.appVersion}</Label>,
-      // },
-      // { title: 'Two', path: paths.dashboard.two, icon: ICONS.ecommerce },
-      // { title: 'Three', path: paths.dashboard.three, icon: ICONS.analytics },
-      { 
-        title: 'عکس ساز', 
-        path: paths.dashboard.templates, 
+      {
+        title: 'داشبورد',
+        path: paths.dashboard.root,
+        icon: ICONS.dashboard,
+      },
+      {
+        title: 'عکس ساز',
+        path: paths.dashboard.templates,
         icon: ICONS.file,
         info: <Label>v1.0</Label>
       },
@@ -73,19 +70,46 @@ export const navData = [
   /**
    * Management
    */
-  // {
-  //   subheader: 'Management',
-  //   items: [
-  //     {
-  //       title: 'Group',
-  //       path: paths.dashboard.group.root,
-  //       icon: ICONS.user,
-  //       children: [
-  //         { title: 'Four', path: paths.dashboard.group.root },
-  //         { title: 'Five', path: paths.dashboard.group.five },
-  //         { title: 'Six', path: paths.dashboard.group.six },
-  //       ],
-  //     },
-  //   ],
-  // },
+  {
+    subheader: 'مدیریت',
+    items: [
+      {
+        title: 'کاربران',
+        path: paths.dashboard.users,
+        icon: ICONS.user,
+        roles: ['admin'],
+      },
+      {
+        title: 'نقش‌ها',
+        path: paths.dashboard.roles,
+        icon: ICONS.lock,
+        roles: ['admin'],
+      },
+      {
+        title: 'شرکت‌ها',
+        path: paths.dashboard.companies,
+        icon: ICONS.booking,
+        roles: ['admin'],
+      },
+      {
+        title: 'گروه‌ها',
+        path: paths.dashboard.groups,
+        icon: ICONS.folder,
+        roles: ['admin', 'company_admin'],
+      },
+    ],
+  },
+  /**
+   * Account
+   */
+  {
+    subheader: 'حساب کاربری',
+    items: [
+      {
+        title: 'پروفایل',
+        path: paths.dashboard.profile,
+        icon: ICONS.user,
+      },
+    ],
+  },
 ];
