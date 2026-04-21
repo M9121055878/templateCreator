@@ -91,12 +91,6 @@ export const navData = [
         icon: ICONS.booking,
         roles: ['admin'],
       },
-      {
-        title: 'گروه‌ها',
-        path: paths.dashboard.groups,
-        icon: ICONS.folder,
-        roles: ['admin', 'company_admin'],
-      },
     ],
   },
   /**

@@ -1,11 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, MenuItem, CircularProgress } from '@mui/material';
-import { useAuthContext } from 'src/auth/hooks/use-auth-context';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, CircularProgress } from '@mui/material';
 import axios from 'src/lib/axios';
 
-export function GroupCreateDialog({ open, onClose, onSuccess, defaultCompanyId }) {
+export function GroupEditDialog({ open, onClose, onSuccess, group }) {
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
@@ -14,32 +13,24 @@ export function GroupCreateDialog({ open, onClose, onSuccess, defaultCompanyId }
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const { user, isAdmin, isCompanyAdmin } = useAuthContext();
 
   useEffect(() => {
-    if (open) {
+    if (open && group) {
+      setFormData({
+        name: group.name || '',
+        slug: group.slug || '',
+        companyId: group.company_id || '',
+      });
       fetchCompanies();
-
-      // Set default company ID if provided (from company detail page)
-      if (defaultCompanyId) {
-        setFormData(prev => ({ ...prev, companyId: defaultCompanyId }));
-      }
-      // If company admin, set their company as default
-      else if (isCompanyAdmin && user?.company_id) {
-        setFormData(prev => ({ ...prev, companyId: user.company_id }));
-      }
     }
-  }, [open, isCompanyAdmin, user, defaultCompanyId]);
+  }, [open, group]);
 
   const fetchCompanies = async () => {
     try {
-      setLoading(true);
       const response = await axios.get('/api/companies');
       setCompanies(response.data.companies || []);
     } catch (error) {
       console.error('Failed to fetch companies:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -52,16 +43,16 @@ export function GroupCreateDialog({ open, onClose, onSuccess, defaultCompanyId }
     e.preventDefault();
     try {
       setSubmitting(true);
-      await axios.post('/api/groups', {
+      await axios.put(`/api/groups/${group.id}`, {
         name: formData.name,
         slug: formData.slug,
-        companyId: formData.companyId,
+        companyId: formData.companyId || null,
       });
       onSuccess();
-      setFormData({ name: '', slug: '', companyId: isCompanyAdmin ? user?.company_id : '' });
+      onClose();
     } catch (error) {
-      console.error('Failed to create group:', error);
-      alert(error.message || 'خطا در ایجاد گروه');
+      console.error('Failed to update group:', error);
+      alert(error.message || 'خطا در ویرایش گروه');
     } finally {
       setSubmitting(false);
     }
@@ -69,7 +60,7 @@ export function GroupCreateDialog({ open, onClose, onSuccess, defaultCompanyId }
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>ایجاد گروه جدید</DialogTitle>
+      <DialogTitle>ویرایش گروه</DialogTitle>
       <DialogContent>
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
@@ -93,28 +84,8 @@ export function GroupCreateDialog({ open, onClose, onSuccess, defaultCompanyId }
               value={formData.slug}
               onChange={handleChange}
               required
-              helperText="مثال: my-group"
               sx={{ mb: 2 }}
             />
-            {!isCompanyAdmin && !defaultCompanyId && (
-              <TextField
-                fullWidth
-                select
-                label="شرکت"
-                name="companyId"
-                value={formData.companyId}
-                onChange={handleChange}
-                required
-                sx={{ mb: 2 }}
-              >
-                <MenuItem value="">انتخاب کنید</MenuItem>
-                {companies.map((company) => (
-                  <MenuItem key={company.id} value={company.id}>
-                    {company.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
           </Box>
         )}
       </DialogContent>
@@ -123,7 +94,7 @@ export function GroupCreateDialog({ open, onClose, onSuccess, defaultCompanyId }
           انصراف
         </Button>
         <Button onClick={handleSubmit} variant="contained" disabled={submitting || loading}>
-          {submitting ? 'در حال ایجاد...' : 'ایجاد'}
+          {submitting ? 'در حال ویرایش...' : 'ویرایش'}
         </Button>
       </DialogActions>
     </Dialog>

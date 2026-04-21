@@ -3,11 +3,14 @@
 import { useState, useEffect } from 'react';
 import { Box, Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Chip, Typography } from '@mui/material';
 import { Iconify } from 'src/components/iconify';
+import { UserEditDialog } from './user-edit-dialog';
 import axios from 'src/lib/axios';
 
 export function UserTable({ refreshKey }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -23,6 +26,28 @@ export function UserTable({ refreshKey }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEdit = (user) => {
+    setSelectedUser(user);
+    setOpenEditDialog(true);
+  };
+
+  const handleDelete = async (userId) => {
+    if (!confirm('آیا از حذف این کاربر اطمینان دارید؟')) return;
+    try {
+      await axios.delete(`/api/users/${userId}`);
+      fetchUsers();
+    } catch (error) {
+      console.error('Failed to delete user:', error);
+      alert('خطا در حذف کاربر');
+    }
+  };
+
+  const handleEditSuccess = () => {
+    setOpenEditDialog(false);
+    setSelectedUser(null);
+    fetchUsers();
   };
 
   const getRoleColor = (roleName) => {
@@ -60,55 +85,63 @@ export function UserTable({ refreshKey }) {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>نام نمایشی</TableCell>
-            <TableCell>نام کاربری</TableCell>
-            <TableCell>نقش</TableCell>
-            <TableCell>شرکت</TableCell>
-            <TableCell>گروه</TableCell>
-            <TableCell>وضعیت</TableCell>
-            <TableCell align="right">عملیات</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {users.map((user) => (
-            <TableRow key={user.id}>
-              <TableCell>
-                {user.first_name} {user.last_name}
-              </TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>
-                <Chip label={getRoleLabel(user.role?.name)} color={getRoleColor(user.role?.name)} size="small" />
-              </TableCell>
-              <TableCell>{user.company?.name || '-'}</TableCell>
-              <TableCell>{user.group?.name || '-'}</TableCell>
-              <TableCell>
-                <Chip label={user.is_active ? 'فعال' : 'غیرفعال'} color={user.is_active ? 'success' : 'default'} size="small" />
-              </TableCell>
-              <TableCell align="right">
-                <IconButton size="small">
-                  <Iconify icon="solar:pen-bold" />
-                </IconButton>
-                <IconButton size="small" color="error">
-                  <Iconify icon="solar:trash-bin-trash-bold" />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
-          {users.length === 0 && (
+    <>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
             <TableRow>
-              <TableCell colSpan={7} align="center" sx={{ py: 3 }}>
-                <Typography variant="body2" color="text.secondary">
-                  کاربری یافت نشد
-                </Typography>
-              </TableCell>
+              <TableCell>نام نمایشی</TableCell>
+              <TableCell>نام کاربری</TableCell>
+              <TableCell>نقش</TableCell>
+              <TableCell>شرکت</TableCell>
+              <TableCell>گروه</TableCell>
+              <TableCell>وضعیت</TableCell>
+              <TableCell align="right">عملیات</TableCell>
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>
+                  {user.first_name} {user.last_name}
+                </TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  <Chip label={getRoleLabel(user.role?.name)} color={getRoleColor(user.role?.name)} size="small" />
+                </TableCell>
+                <TableCell>{user.company?.name || '-'}</TableCell>
+                <TableCell>{user.group?.name || '-'}</TableCell>
+                <TableCell>
+                  <Chip label={user.is_active ? 'فعال' : 'غیرفعال'} color={user.is_active ? 'success' : 'default'} size="small" />
+                </TableCell>
+                <TableCell align="right">
+                  <IconButton size="small" onClick={() => handleEdit(user)}>
+                    <Iconify icon="solar:pen-bold" />
+                  </IconButton>
+                  <IconButton size="small" color="error" onClick={() => handleDelete(user.id)}>
+                    <Iconify icon="solar:trash-bin-trash-bold" />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+            {users.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={7} align="center" sx={{ py: 3 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    کاربری یافت نشد
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <UserEditDialog
+        open={openEditDialog}
+        onClose={() => setOpenEditDialog(false)}
+        onSuccess={handleEditSuccess}
+        user={selectedUser}
+      />
+    </>
   );
 }
