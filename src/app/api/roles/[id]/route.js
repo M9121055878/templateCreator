@@ -19,7 +19,7 @@ export async function GET(request, { params }) {
     const decoded = verify(token, JWT_SECRET);
     
     // Check if user has admin role
-    if (decoded.role !== 'admin') {
+    if (decoded.role !== 'super_admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
@@ -60,7 +60,7 @@ export async function PUT(request, { params }) {
     const decoded = verify(token, JWT_SECRET);
     
     // Check if user has admin role
-    if (decoded.role !== 'admin') {
+    if (decoded.role !== 'super_admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
@@ -109,7 +109,7 @@ export async function DELETE(request, { params }) {
     const decoded = verify(token, JWT_SECRET);
     
     // Check if user has admin role
-    if (decoded.role !== 'admin') {
+    if (decoded.role !== 'super_admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
@@ -125,10 +125,10 @@ export async function DELETE(request, { params }) {
       );
     }
 
-    // Prevent deleting default roles
-    if (['admin', 'company_admin', 'user'].includes(role.name)) {
+    // Prevent deleting super_admin role
+    if (role.name === 'super_admin') {
       return NextResponse.json(
-        { message: 'Cannot delete default roles' },
+        { message: 'Cannot delete super_admin role' },
         { status: 400 }
       );
     }

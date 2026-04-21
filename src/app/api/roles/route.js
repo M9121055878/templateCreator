@@ -19,7 +19,7 @@ export async function GET(request) {
     const decoded = verify(token, JWT_SECRET);
     
     // Check if user has admin role
-    if (decoded.role !== 'admin') {
+    if (decoded.role !== 'super_admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
@@ -53,7 +53,7 @@ export async function POST(request) {
     const decoded = verify(token, JWT_SECRET);
     
     // Check if user has admin role
-    if (decoded.role !== 'admin') {
+    if (decoded.role !== 'super_admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }

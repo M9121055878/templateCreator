@@ -80,7 +80,7 @@ export function CompanyTable({ refreshKey }) {
                   <Typography
                     component="span"
                     sx={{ cursor: 'pointer', color: 'primary.main', fontWeight: 500 }}
-                    onClick={() => router.push(paths.dashboard.companiesDetail(company.id))}
+                    onClick={() => router.push(paths.dashboard.companiesDetail(company.slug))}
                   >
                     {company.name}
                   </Typography>

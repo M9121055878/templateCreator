@@ -52,14 +52,6 @@ export function DashboardView() {
       color: 'success',
       roles: ['admin'],
     },
-    {
-      title: 'گروه‌ها',
-      description: 'مدیریت گروه‌ها',
-      icon: 'solar:folder-with-files-bold-duotone',
-      path: paths.dashboard.groups,
-      color: 'error',
-      roles: ['admin', 'company_admin'],
-    },
   ];
 
   const accountTools = [

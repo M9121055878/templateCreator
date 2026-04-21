@@ -19,7 +19,7 @@ export async function POST(request, { params }) {
     const decoded = verify(token, JWT_SECRET);
     
     // Check if user has admin role
-    if (decoded.role !== 'admin') {
+    if (decoded.role !== 'super_admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }

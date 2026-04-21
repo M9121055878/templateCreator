@@ -89,12 +89,13 @@ function initializeSchema(db) {
     CREATE TABLE IF NOT EXISTS groups (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
-      slug TEXT UNIQUE NOT NULL,
+      slug TEXT NOT NULL,
       company_id TEXT NOT NULL,
       is_active BOOLEAN DEFAULT 1,
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL,
-      FOREIGN KEY (company_id) REFERENCES companies(id)
+      FOREIGN KEY (company_id) REFERENCES companies(id),
+      UNIQUE(company_id, slug)
     );
 
     CREATE INDEX IF NOT EXISTS idx_groups_company ON groups(company_id);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, Checkbox, FormControlLabel, CircularProgress } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, Checkbox, FormControlLabel, CircularProgress, Typography } from '@mui/material';
 import axios from 'src/lib/axios';
 
 const AVAILABLE_PERMISSIONS = [

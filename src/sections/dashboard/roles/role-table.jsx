@@ -86,7 +86,7 @@ export function RoleTable({ refreshKey }) {
                   <IconButton size="small" onClick={() => handleEdit(role)}>
                     <Iconify icon="solar:pen-bold" />
                   </IconButton>
-                  {role.name !== 'admin' && role.name !== 'company_admin' && role.name !== 'user' && (
+                  {role.name !== 'super_admin' && (
                     <IconButton size="small" color="error" onClick={() => handleDelete(role.id)}>
                       <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>

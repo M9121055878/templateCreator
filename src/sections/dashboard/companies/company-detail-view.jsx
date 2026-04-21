@@ -9,7 +9,7 @@ import { GroupTable } from '../groups/group-table';
 import { GroupCreateDialog } from '../groups/group-create-dialog';
 import axios from 'src/lib/axios';
 
-export function CompanyDetailView({ companyId }) {
+export function CompanyDetailView({ companySlug }) {
   const router = useRouter();
   const [company, setCompany] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,12 +18,12 @@ export function CompanyDetailView({ companyId }) {
 
   useEffect(() => {
     fetchCompany();
-  }, [companyId]);
+  }, [companySlug]);
 
   const fetchCompany = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`/api/companies/${companyId}`);
+      const response = await axios.get(`/api/companies/${companySlug}`);
       setCompany(response.data.company);
     } catch (error) {
       console.error('Failed to fetch company:', error);
@@ -89,7 +89,7 @@ export function CompanyDetailView({ companyId }) {
         </Card>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="h5">گروه‌های شرکت</Typography>
+          <Typography variant="h5">گروه‌ها</Typography>
           <Button
             variant="contained"
             color="inherit"
@@ -101,14 +101,14 @@ export function CompanyDetailView({ companyId }) {
         </Stack>
 
         <Card>
-          <GroupTable refreshKey={refreshKey} companyId={companyId} />
+          <GroupTable refreshKey={refreshKey} companyId={company?.id} />
         </Card>
 
         <GroupCreateDialog
           open={openCreateDialog}
           onClose={() => setOpenCreateDialog(false)}
           onSuccess={handleCreateSuccess}
-          defaultCompanyId={companyId}
+          defaultCompanyId={company?.id}
         />
       </Stack>
     </Container>

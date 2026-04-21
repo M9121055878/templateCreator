@@ -23,7 +23,7 @@ export async function GET(request) {
         const token = authHeader.substring(7);
         const decoded = verify(token, JWT_SECRET);
         userContext = {
-          isAdmin: decoded.role === 'admin',
+          isAdmin: decoded.role === 'super_admin',
           companyId: decoded.companyId || null,
           groupId: decoded.groupId || null,
         };

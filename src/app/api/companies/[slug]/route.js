@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getCompanyById, updateCompany, deleteCompany } from 'src/lib/auth-db';
+import { getCompanyBySlug, getCompanyById, updateCompany, deleteCompany } from 'src/lib/auth-db';
 import { verify } from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
@@ -19,14 +19,15 @@ export async function GET(request, { params }) {
     const decoded = verify(token, JWT_SECRET);
     
     // Check if user has admin role
-    if (decoded.role !== 'admin') {
+    if (decoded.role !== 'super_admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
       );
     }
 
-    const company = getCompanyById(params.id);
+    const { slug } = await params;
+    const company = getCompanyBySlug(slug);
     
     if (!company) {
       return NextResponse.json(
@@ -60,7 +61,7 @@ export async function PUT(request, { params }) {
     const decoded = verify(token, JWT_SECRET);
     
     // Check if user has admin role
-    if (decoded.role !== 'admin') {
+    if (decoded.role !== 'super_admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
@@ -70,13 +71,23 @@ export async function PUT(request, { params }) {
     const body = await request.json();
     const { name, slug, isActive } = body;
 
-    const company = updateCompany(params.id, {
+    // Get company by slug to obtain ID for update
+    const { slug: paramSlug } = await params;
+    const company = getCompanyBySlug(paramSlug);
+    if (!company) {
+      return NextResponse.json(
+        { message: 'Company not found' },
+        { status: 404 }
+      );
+    }
+
+    const updatedCompany = updateCompany(company.id, {
       name,
       slug,
       isActive,
     });
 
-    return NextResponse.json({ company });
+    return NextResponse.json({ company: updatedCompany });
   } catch (error) {
     console.error('Update company error:', error);
     
@@ -109,14 +120,15 @@ export async function DELETE(request, { params }) {
     const decoded = verify(token, JWT_SECRET);
     
     // Check if user has admin role
-    if (decoded.role !== 'admin') {
+    if (decoded.role !== 'super_admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
       );
     }
 
-    const company = getCompanyById(params.id);
+    const { slug } = await params;
+    const company = getCompanyBySlug(slug);
     
     if (!company) {
       return NextResponse.json(
@@ -125,7 +137,7 @@ export async function DELETE(request, { params }) {
       );
     }
 
-    deleteCompany(params.id);
+    deleteCompany(company.id);
 
     return NextResponse.json({ message: 'Company deleted successfully' });
   } catch (error) {

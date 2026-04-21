@@ -6,6 +6,7 @@ import { CompanyDetailView } from 'src/sections/dashboard/companies/company-deta
 
 export const metadata = { title: `Company Detail - ${CONFIG.appName}` };
 
-export default function Page({ params }) {
-  return <CompanyDetailView companyId={params.id} />;
+export default async function Page({ params }) {
+  const { slug } = await params;
+  return <CompanyDetailView companySlug={slug} />;
 }

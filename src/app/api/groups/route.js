@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { listGroups, createGroup } from 'src/lib/auth-db';
+import { listGroups, createGroup, getGroupBySlugAndCompanyId } from 'src/lib/auth-db';
 import { verify } from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
@@ -18,8 +18,8 @@ export async function GET(request) {
     const token = authHeader.substring(7);
     const decoded = verify(token, JWT_SECRET);
     
-    // Check if user has admin or company_admin role
-    if (decoded.role !== 'admin' && decoded.role !== 'company_admin') {
+    // Check if user has super_admin or admin role
+    if (decoded.role !== 'super_admin' && decoded.role !== 'admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
@@ -30,8 +30,8 @@ export async function GET(request) {
     const companyId = searchParams.get('companyId');
     const isActive = searchParams.get('isActive');
 
-    // If company admin, only show groups from their company
-    const filterCompanyId = decoded.role === 'company_admin' ? decoded.companyId : companyId;
+    // If admin (company admin), only show groups from their company
+    const filterCompanyId = decoded.role === 'admin' ? decoded.companyId : companyId;
 
     const groups = listGroups({
       companyId: filterCompanyId,
@@ -62,8 +62,8 @@ export async function POST(request) {
     const token = authHeader.substring(7);
     const decoded = verify(token, JWT_SECRET);
     
-    // Check if user has admin or company_admin role
-    if (decoded.role !== 'admin' && decoded.role !== 'company_admin') {
+    // Check if user has super_admin or admin role
+    if (decoded.role !== 'super_admin' && decoded.role !== 'admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
@@ -80,11 +80,20 @@ export async function POST(request) {
       );
     }
 
-    // If company admin, they can only create groups in their company
-    if (decoded.role === 'company_admin' && companyId !== decoded.companyId) {
+    // If admin (company admin), they can only create groups in their company
+    if (decoded.role === 'admin' && companyId !== decoded.companyId) {
       return NextResponse.json(
         { message: 'You can only create groups in your company' },
         { status: 403 }
+      );
+    }
+
+    // Check if slug already exists within the same company
+    const existingGroup = getGroupBySlugAndCompanyId(slug, companyId);
+    if (existingGroup) {
+      return NextResponse.json(
+        { message: 'Slug already exists in this company' },
+        { status: 409 }
       );
     }
 
@@ -96,7 +105,7 @@ export async function POST(request) {
     
     if (error.message.includes('UNIQUE constraint failed')) {
       return NextResponse.json(
-        { message: 'Slug already exists' },
+        { message: 'Slug already exists in this company' },
         { status: 409 }
       );
     }

@@ -1,0 +1,24 @@
+---
+inclusion: always
+---
+
+# Minimal UI Kit v7 -- Project Context
+
+- **Stack**: Next.js 15 App Router, React 19, MUI v7, Emotion, JavaScript (JSX)
+- **Kit**: Minimal UI Kit v7.3.0 (starter), package: `@minimal-kit/starter-next-js`
+- **Dev server**: port 3033, Turbopack enabled
+- **Path aliases**: `src/...` via jsconfig.json baseUrl
+- **Auth**: JWT (`src/auth/context/jwt/`), configurable via `src/global-config.js`
+- **i18n**: i18next + jalaliday (Persian calendar), RTL support
+- **Data fetching**: @tanstack/react-query + axios (`src/lib/axios.js`)
+- **Forms**: react-hook-form + zod
+- **Icons**: Iconify (Solar icon set) + SvgColor for navbar icons
+- **UI language**: Persian (Farsi), validation messages in Farsi
+- **Theme**: Dark/light mode, MUI sx prop, `alpha()` for transparent colors
+
+## Do NOT modify
+- `src/layouts/` (dashboard, simple, auth-split layouts)
+- `src/theme/` (theme configuration)
+- `src/auth/` (auth context and guards)
+- `src/components/` (shared UI kit components)
+- `src/locales/` (i18n infrastructure)

@@ -1,0 +1,23 @@
+---
+inclusion: fileMatch
+fileMatchPattern: ['src/app/**/*.jsx']
+---
+
+# Page File Rules
+
+- `page.jsx` files contain ONLY metadata export and a single import from `src/sections/.../view/`
+- No logic, styles, or inline components in page files
+- Each dashboard route has its own directory: `/dashboard`, `/dashboard/posts`, etc.
+
+## Example
+
+```jsx
+// src/app/dashboard/posts/page.jsx
+import { PostsView } from 'src/sections/cyberspace/view/posts';
+
+export const metadata = { title: 'پست‌ها' };
+
+export default function Page() {
+  return <PostsView />;
+}
+```

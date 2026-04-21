@@ -81,40 +81,51 @@ function initializeSchema(db) {
     CREATE TABLE IF NOT EXISTS groups (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
-      slug TEXT UNIQUE NOT NULL,
+      slug TEXT NOT NULL,
       company_id TEXT NOT NULL,
       is_active BOOLEAN DEFAULT 1,
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL,
-      FOREIGN KEY (company_id) REFERENCES companies(id)
+      FOREIGN KEY (company_id) REFERENCES companies(id),
+      UNIQUE(company_id, slug)
     );
 
     CREATE INDEX IF NOT EXISTS idx_groups_company ON groups(company_id);
     CREATE INDEX IF NOT EXISTS idx_groups_slug ON groups(slug);
   `);
 
-  // Create default admin role if it doesn't exist
-  const adminRole = db.prepare('SELECT * FROM roles WHERE name = ?').get('admin');
-  if (!adminRole) {
-    const adminRoleId = generateId();
+  // Migrate old role names if they exist
+  const oldAdminRole = db.prepare('SELECT * FROM roles WHERE name = ?').get('admin');
+  if (oldAdminRole) {
+    db.prepare('UPDATE roles SET name = ? WHERE name = ?').run('super_admin', 'admin');
+  }
+  const oldCompanyAdminRole = db.prepare('SELECT * FROM roles WHERE name = ?').get('company_admin');
+  if (oldCompanyAdminRole) {
+    db.prepare('UPDATE roles SET name = ? WHERE name = ?').run('admin', 'company_admin');
+  }
+
+  // Create default super_admin role if it doesn't exist
+  const superAdminRole = db.prepare('SELECT * FROM roles WHERE name = ?').get('super_admin');
+  if (!superAdminRole) {
+    const superAdminRoleId = generateId();
     const now = new Date().toISOString();
     const permissions = JSON.stringify(['templates', 'theme-builder', 'users', 'roles', 'companies', 'groups']);
     db.prepare(`
       INSERT INTO roles (id, name, description, permissions_json, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?)
-    `).run(adminRoleId, 'admin', 'System administrator with full access', permissions, now, now);
+    `).run(superAdminRoleId, 'super_admin', 'System administrator with full access', permissions, now, now);
   }
 
-  // Create default company admin role if it doesn't exist
-  const companyAdminRole = db.prepare('SELECT * FROM roles WHERE name = ?').get('company_admin');
-  if (!companyAdminRole) {
-    const companyAdminRoleId = generateId();
+  // Create default admin role if it doesn't exist
+  const adminRole = db.prepare('SELECT * FROM roles WHERE name = ?').get('admin');
+  if (!adminRole) {
+    const adminRoleId = generateId();
     const now = new Date().toISOString();
     const permissions = JSON.stringify(['templates', 'theme-builder', 'groups']);
     db.prepare(`
       INSERT INTO roles (id, name, description, permissions_json, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?)
-    `).run(companyAdminRoleId, 'company_admin', 'Company administrator', permissions, now, now);
+    `).run(adminRoleId, 'admin', 'Company administrator', permissions, now, now);
   }
 
   // Create default user role if it doesn't exist

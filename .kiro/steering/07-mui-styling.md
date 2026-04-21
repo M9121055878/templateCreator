@@ -1,0 +1,13 @@
+---
+inclusion: fileMatch
+fileMatchPattern: ['**/*.jsx']
+---
+
+# MUI Styling
+
+- Use `sx` prop for all styling (no styled-components, no CSS modules)
+- Use `alpha()` from `minimal-shared/utils` for transparent colors
+- Use `Iconify` component for icons (Solar icon set)
+- Use `SvgColor` for navbar icons from `public/assets/icons/navbar/`
+- Support dark/light mode -- never hardcode colors, use theme palette
+- Use MUI `useTheme()` or `theme.palette` for dynamic colors

@@ -6,7 +6,7 @@ import { Iconify } from 'src/components/iconify';
 import { GroupTable } from './group-table';
 import { GroupCreateDialog } from './group-create-dialog';
 
-export function GroupsView() {
+export function GroupsView({ companySlug }) {
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -33,7 +33,11 @@ export function GroupsView() {
         <GroupTable refreshKey={refreshKey} />
       </Card>
 
-      <GroupCreateDialog open={openCreateDialog} onClose={() => setOpenCreateDialog(false)} onSuccess={handleCreateSuccess} />
+      <GroupCreateDialog
+        open={openCreateDialog}
+        onClose={() => setOpenCreateDialog(false)}
+        onSuccess={handleCreateSuccess}
+      />
     </Container>
   );
 }

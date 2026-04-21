@@ -374,6 +374,15 @@ export function getGroupBySlug(slug) {
   return { ...group, company };
 }
 
+export function getGroupBySlugAndCompanyId(slug, companyId) {
+  const db = getAuthDb();
+  const group = db.prepare('SELECT * FROM groups WHERE slug = ? AND company_id = ?').get(slug, companyId);
+  if (!group) return null;
+  
+  const company = getCompanyById(group.company_id);
+  return { ...group, company };
+}
+
 export function createGroup({ name, slug, companyId }) {
   const db = getAuthDb();
   const id = generateId();

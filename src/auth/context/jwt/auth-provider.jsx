@@ -74,8 +74,8 @@ export function AuthProvider({ children }) {
         if (!state.user?.role?.permissions) return false;
         return state.user.role.permissions.includes(permission);
       },
-      isAdmin: state.user?.role?.name === 'admin',
-      isCompanyAdmin: state.user?.role?.name === 'company_admin',
+      isAdmin: state.user?.role?.name === 'super_admin',
+      isCompanyAdmin: state.user?.role?.name === 'admin',
     }),
     [checkUserSession, signOut, state.user, status]
   );

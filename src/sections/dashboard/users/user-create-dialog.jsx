@@ -26,37 +26,21 @@ export function UserCreateDialog({ open, onClose, onSuccess }) {
     }
   }, [open]);
 
-  useEffect(() => {
-    if (formData.companyId) {
-      fetchGroups(formData.companyId);
-    } else {
-      setGroups([]);
-      setFormData(prev => ({ ...prev, groupId: '' }));
-    }
-  }, [formData.companyId]);
-
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [rolesRes, companiesRes] = await Promise.all([
+      const [rolesRes, companiesRes, groupsRes] = await Promise.all([
         axios.get('/api/roles'),
         axios.get('/api/companies'),
+        axios.get('/api/groups'),
       ]);
       setRoles(rolesRes.data.roles || []);
       setCompanies(companiesRes.data.companies || []);
+      setGroups(groupsRes.data.groups || []);
     } catch (error) {
       console.error('Failed to fetch data:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchGroups = async (companyId) => {
-    try {
-      const response = await axios.get(`/api/groups?companyId=${companyId}`);
-      setGroups(response.data.groups || []);
-    } catch (error) {
-      console.error('Failed to fetch groups:', error);
     }
   };
 

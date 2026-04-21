@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getGroupById, updateGroup, deleteGroup } from 'src/lib/auth-db';
+import { getGroupById, updateGroup, deleteGroup, getGroupBySlugAndCompanyId } from 'src/lib/auth-db';
 import { verify } from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
@@ -18,8 +18,8 @@ export async function GET(request, { params }) {
     const token = authHeader.substring(7);
     const decoded = verify(token, JWT_SECRET);
     
-    // Check if user has admin or company_admin role
-    if (decoded.role !== 'admin' && decoded.role !== 'company_admin') {
+    // Check if user has super_admin or admin role
+    if (decoded.role !== 'super_admin' && decoded.role !== 'admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
@@ -35,8 +35,8 @@ export async function GET(request, { params }) {
       );
     }
 
-    // If company admin, check if group belongs to their company
-    if (decoded.role === 'company_admin' && group.company_id !== decoded.companyId) {
+    // If admin (company admin), check if group belongs to their company
+    if (decoded.role === 'admin' && group.company_id !== decoded.companyId) {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
@@ -67,8 +67,8 @@ export async function PUT(request, { params }) {
     const token = authHeader.substring(7);
     const decoded = verify(token, JWT_SECRET);
     
-    // Check if user has admin or company_admin role
-    if (decoded.role !== 'admin' && decoded.role !== 'company_admin') {
+    // Check if user has super_admin or admin role
+    if (decoded.role !== 'super_admin' && decoded.role !== 'admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
@@ -84,8 +84,8 @@ export async function PUT(request, { params }) {
       );
     }
 
-    // If company admin, check if group belongs to their company
-    if (decoded.role === 'company_admin' && group.company_id !== decoded.companyId) {
+    // If admin (company admin), check if group belongs to their company
+    if (decoded.role === 'admin' && group.company_id !== decoded.companyId) {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
@@ -95,12 +95,24 @@ export async function PUT(request, { params }) {
     const body = await request.json();
     const { name, slug, companyId, isActive } = body;
 
-    // If company admin, they can only assign to their company
-    if (decoded.role === 'company_admin' && companyId && companyId !== decoded.companyId) {
+    // If admin (company admin), they can only assign to their company
+    if (decoded.role === 'admin' && companyId && companyId !== decoded.companyId) {
       return NextResponse.json(
         { message: 'You can only assign groups to your company' },
         { status: 403 }
       );
+    }
+
+    // Check if slug already exists within the same company (excluding current group)
+    const targetCompanyId = companyId || group.company_id;
+    if (slug && slug !== group.slug) {
+      const existingGroup = getGroupBySlugAndCompanyId(slug, targetCompanyId);
+      if (existingGroup && existingGroup.id !== params.id) {
+        return NextResponse.json(
+          { message: 'Slug already exists in this company' },
+          { status: 409 }
+        );
+      }
     }
 
     const updatedGroup = updateGroup(params.id, {
@@ -116,7 +128,7 @@ export async function PUT(request, { params }) {
     
     if (error.message.includes('UNIQUE constraint failed')) {
       return NextResponse.json(
-        { message: 'Slug already exists' },
+        { message: 'Slug already exists in this company' },
         { status: 409 }
       );
     }
@@ -142,8 +154,8 @@ export async function DELETE(request, { params }) {
     const token = authHeader.substring(7);
     const decoded = verify(token, JWT_SECRET);
     
-    // Check if user has admin or company_admin role
-    if (decoded.role !== 'admin' && decoded.role !== 'company_admin') {
+    // Check if user has super_admin or admin role
+    if (decoded.role !== 'super_admin' && decoded.role !== 'admin') {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
@@ -159,8 +171,8 @@ export async function DELETE(request, { params }) {
       );
     }
 
-    // If company admin, check if group belongs to their company
-    if (decoded.role === 'company_admin' && group.company_id !== decoded.companyId) {
+    // If admin (company admin), check if group belongs to their company
+    if (decoded.role === 'admin' && group.company_id !== decoded.companyId) {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
