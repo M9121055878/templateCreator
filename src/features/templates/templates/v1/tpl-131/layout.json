@@ -1,0 +1,34 @@
+{
+  "root": {
+    "id": "root",
+    "type": "frame",
+    "x": 0,
+    "y": 0,
+    "w": 1080,
+    "h": 1080,
+    "style": {
+      "backgroundColor": "#101828",
+      "overflow": "hidden"
+    },
+    "children": [
+      "title-node"
+    ]
+  },
+  "nodes": {
+    "title-node": {
+      "id": "title-node",
+      "type": "text",
+      "x": 120,
+      "y": 140,
+      "w": 840,
+      "h": 180,
+      "style": {
+        "color": "#ffffff",
+        "fontFamily": "Nian-Black",
+        "fontSize": 88,
+        "lineHeight": 1.2
+      },
+      "text": "{{input.title}}"
+    }
+  }
+}

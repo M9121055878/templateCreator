@@ -62,6 +62,12 @@ export const navData = [
         icon: ICONS.file,
         info: <Label>v1.0</Label>
       },
+      {
+        title: 'تم ساز',
+        path: paths.dashboard.themeBuilder,
+        icon: ICONS.params,
+        info: <Label color="info">beta</Label>,
+      },
     ],
   },
   /**

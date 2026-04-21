@@ -1,0 +1,12 @@
+{
+  "inputs": [
+    {
+      "key": "title",
+      "type": "text",
+      "label": "عنوان",
+      "required": true,
+      "default": "عنوان نمونه",
+      "maxLength": 80
+    }
+  ]
+}

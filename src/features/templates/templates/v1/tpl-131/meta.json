@@ -1,0 +1,17 @@
+{
+  "id": "tpl-131",
+  "version": "1.0.0",
+  "status": "draft",
+  "engine": "dsl-v1",
+  "meta": {
+    "title": "تمپلیت شماره ۲",
+    "category": "custom",
+    "size": {
+      "width": 1080,
+      "height": 1080
+    },
+    "recommendedFormat": "png",
+    "hasTransparency": true,
+    "tags": []
+  }
+}

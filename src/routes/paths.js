@@ -46,6 +46,7 @@ export const paths = {
     two: `${ROOTS.DASHBOARD}/two`,
     three: `${ROOTS.DASHBOARD}/three`,
     templates: `${ROOTS.DASHBOARD}/templates`,
+    themeBuilder: `${ROOTS.DASHBOARD}/theme-builder`,
     group: {
       root: `${ROOTS.DASHBOARD}/group`,
       five: `${ROOTS.DASHBOARD}/group/five`,
