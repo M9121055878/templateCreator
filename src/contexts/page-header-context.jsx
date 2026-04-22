@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
 
 const PageHeaderContext = createContext();
 
@@ -12,18 +12,18 @@ export function PageHeaderProvider({ children }) {
     backAction: null,
   });
 
-  const updateHeader = (data) => {
+  const updateHeader = useCallback((data) => {
     setHeaderData(data);
-  };
+  }, []);
 
-  const clearHeader = () => {
+  const clearHeader = useCallback(() => {
     setHeaderData({
       title: '',
       subtitle: '',
       action: null,
       backAction: null,
     });
-  };
+  }, []);
 
   return (
     <PageHeaderContext.Provider value={{ headerData, updateHeader, clearHeader }}>
