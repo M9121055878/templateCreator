@@ -60,21 +60,21 @@ export function TemplateStudioView() {
 
   return (
     <DashboardContent maxWidth="xl">
-      <Stack spacing={3}>
-        <PageHeader
-          title="عکس ساز"
-          subtitle="با وارد کردن مقادیر، پیش‌نمایش زنده می‌بینید و خروجی PNG یا JPG دانلود می‌کنید."
-          action={{
-            label: 'ذخیره تصویر',
-            icon: 'mingcute:download-2-line',
-            onClick: () => {
-              // This will be handled by ExportActions component
-              const exportButton = document.querySelector('[data-export-trigger]');
-              if (exportButton) exportButton.click();
-            },
-          }}
-        />
+      <PageHeader
+        title="عکس ساز"
+        subtitle="با وارد کردن مقادیر، پیش‌نمایش زنده می‌بینید و خروجی PNG یا JPG دانلود می‌کنید."
+        action={{
+          label: 'ذخیره تصویر',
+          icon: 'mingcute:download-2-line',
+          onClick: () => {
+            // This will be handled by ExportActions component
+            const exportButton = document.querySelector('[data-export-trigger]');
+            if (exportButton) exportButton.click();
+          },
+        }}
+      />
 
+      <Stack spacing={3}>
         <ExportActions exportRef={exportNodeRef} template={activeTemplate} />
 
         <Grid container spacing={3}>

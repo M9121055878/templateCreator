@@ -33,7 +33,7 @@ import { ContactsPopover } from '../components/contacts-popover';
 import { WorkspacesPopover } from '../components/workspaces-popover';
 import { navData as dashboardNavData } from '../nav-config-dashboard';
 import { dashboardLayoutVars, dashboardNavColorVars } from './css-vars';
-import { NotificationsDrawer } from '../components/notifications-drawer';
+import { HeaderContent } from './header-content';
 import { MainSection, layoutClasses, HeaderSection, LayoutSection } from '../core';
 
 // ----------------------------------------------------------------------
@@ -90,6 +90,7 @@ export function DashboardLayout({ sx, cssVars, children, slotProps, layoutQuery 
           checkPermissions={canDisplayItemByRole}
         />
       ) : null,
+      centerArea: <HeaderContent />,
       leftArea: (
         <>
           {/** @slot Nav mobile */}

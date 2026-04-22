@@ -60,14 +60,14 @@ export function CompanyDetailView({ companySlug }) {
 
   return (
     <Container maxWidth="xl">
-      <Stack spacing={4}>
-        <PageHeader
-          title={`جزئیات شرکت: ${company.name}`}
-          backAction={{
-            onClick: () => router.push(paths.dashboard.companies),
-          }}
-        />
+      <PageHeader
+        title={`جزئیات شرکت: ${company.name}`}
+        backAction={{
+          onClick: () => router.push(paths.dashboard.companies),
+        }}
+      />
 
+      <Stack spacing={4}>
         <Card sx={{ p: 3 }}>
           <Stack spacing={2}>
             <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>

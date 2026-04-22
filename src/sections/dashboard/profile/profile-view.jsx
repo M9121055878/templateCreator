@@ -71,20 +71,20 @@ export function ProfileView() {
 
   return (
     <Container maxWidth="sm">
-      <Stack spacing={3}>
-        <PageHeader
-          title="پروفایل"
-          subtitle="مشاهده و ویرایش اطلاعات حساب کاربری"
-          action={{
-            label: 'خروج از حساب کاربری',
-            icon: 'mingcute:exit-line',
-            variant: 'outlined',
-            color: 'error',
-            onClick: handleLogout,
-            disabled: loadingLogout,
-          }}
-        />
+      <PageHeader
+        title="پروفایل"
+        subtitle="مشاهده و ویرایش اطلاعات حساب کاربری"
+        action={{
+          label: 'خروج از حساب کاربری',
+          icon: 'mingcute:exit-line',
+          variant: 'outlined',
+          color: 'error',
+          onClick: handleLogout,
+          disabled: loadingLogout,
+        }}
+      />
 
+      <Stack spacing={3}>
         <Card sx={{ p: 3 }}>
           <Stack spacing={3}>
             <Box>

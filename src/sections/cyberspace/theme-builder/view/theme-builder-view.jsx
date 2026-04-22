@@ -400,17 +400,17 @@ export function ThemeBuilderView() {
 
   return (
     <DashboardContent maxWidth="xl" sx={{ px: { xs: 1, md: 2 } }}>
-      <Stack spacing={2} sx={{ height: 'calc(100vh - 100px)', minHeight: 600 }}>
-        <PageHeader
-          title="تم ساز"
-          subtitle={document?.meta?.title || 'بدون عنوان'}
-          action={{
-            label: 'ساخت تم جدید',
-            icon: 'mingcute:add-line',
-            onClick: handleCreate,
-          }}
-        />
+      <PageHeader
+        title="تم ساز"
+        subtitle={document?.meta?.title || 'بدون عنوان'}
+        action={{
+          label: 'ساخت تم جدید',
+          icon: 'mingcute:add-line',
+          onClick: handleCreate,
+        }}
+      />
 
+      <Stack spacing={2} sx={{ height: 'calc(100vh - 180px)', minHeight: 600 }}>
         {/* Secondary Actions Menu */}
         <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
           <Button

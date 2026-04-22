@@ -20,17 +20,17 @@ export function CompaniesView() {
 
   return (
     <Container maxWidth="xl">
-      <Stack spacing={5}>
-        <PageHeader
-          title="شرکت ها"
-          subtitle="مدیریت شرکت‌ها"
-          action={{
-            label: 'شرکت جدید',
-            icon: 'mingcute:add-line',
-            onClick: () => setOpenCreateDialog(true),
-          }}
-        />
+      <PageHeader
+        title="شرکت ها"
+        subtitle="مدیریت شرکت‌ها"
+        action={{
+          label: 'شرکت جدید',
+          icon: 'mingcute:add-line',
+          onClick: () => setOpenCreateDialog(true),
+        }}
+      />
 
+      <Stack spacing={3}>
         <Card>
           <CompanyTable refreshKey={refreshKey} />
         </Card>

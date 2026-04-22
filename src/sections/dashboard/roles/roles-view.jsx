@@ -20,17 +20,17 @@ export function RolesView() {
 
   return (
     <Container maxWidth="xl">
-      <Stack spacing={5}>
-        <PageHeader
-          title="نقش ها"
-          subtitle="مدیریت نقش‌ها و دسترسی‌ها"
-          action={{
-            label: 'نقش جدید',
-            icon: 'mingcute:add-line',
-            onClick: () => setOpenCreateDialog(true),
-          }}
-        />
+      <PageHeader
+        title="نقش ها"
+        subtitle="مدیریت نقش‌ها و دسترسی‌ها"
+        action={{
+          label: 'نقش جدید',
+          icon: 'mingcute:add-line',
+          onClick: () => setOpenCreateDialog(true),
+        }}
+      />
 
+      <Stack spacing={3}>
         <Card>
           <RoleTable refreshKey={refreshKey} />
         </Card>

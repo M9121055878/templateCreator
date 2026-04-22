@@ -20,17 +20,17 @@ export function UsersView() {
 
   return (
     <Container maxWidth="xl">
-      <Stack spacing={5}>
-        <PageHeader
-          title="کاربران"
-          subtitle="مدیریت کاربران سیستم"
-          action={{
-            label: 'کاربر جدید',
-            icon: 'mingcute:add-line',
-            onClick: () => setOpenCreateDialog(true),
-          }}
-        />
+      <PageHeader
+        title="کاربران"
+        subtitle="مدیریت کاربران سیستم"
+        action={{
+          label: 'کاربر جدید',
+          icon: 'mingcute:add-line',
+          onClick: () => setOpenCreateDialog(true),
+        }}
+      />
 
+      <Stack spacing={3}>
         <Card>
           <UserTable refreshKey={refreshKey} />
         </Card>

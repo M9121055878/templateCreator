@@ -112,19 +112,19 @@ export function DashboardView() {
 
   return (
     <Container maxWidth="xl">
-      <Stack spacing={4}>
-        <PageHeader
-          title="داشبورد"
-          subtitle="به داشبورد خوش آمدید"
-          action={{
-            label: 'خروج از حساب کاربری',
-            icon: 'mingcute:exit-line',
-            variant: 'outlined',
-            color: 'error',
-            onClick: () => router.push('/auth/jwt/sign-in'),
-          }}
-        />
+      <PageHeader
+        title="داشبورد"
+        subtitle="به داشبورد خوش آمدید"
+        action={{
+          label: 'خروج از حساب کاربری',
+          icon: 'mingcute:exit-line',
+          variant: 'outlined',
+          color: 'error',
+          onClick: () => router.push('/auth/jwt/sign-in'),
+        }}
+      />
 
+      <Stack spacing={4}>
         <Box>
           <Typography variant="h5" sx={{ mb: 3 }}>
             ابزارها
