@@ -4,9 +4,9 @@ import { useRef, useMemo, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 
 import { DashboardContent } from 'src/layouts/dashboard';
+import { PageHeader } from 'src/components/page-header';
 import {
   TEMPLATE_ENGINES,
   getTemplateRegistry,
@@ -61,12 +61,19 @@ export function TemplateStudioView() {
   return (
     <DashboardContent maxWidth="xl">
       <Stack spacing={3}>
-        <Stack spacing={1}>
-          <Typography variant="h4">استودیو تمپلیت تصویری</Typography>
-          <Typography sx={{ color: 'text.secondary' }}>
-            با وارد کردن مقادیر، پیش‌نمایش زنده می‌بینید و خروجی PNG یا JPG دانلود می‌کنید.
-          </Typography>
-        </Stack>
+        <PageHeader
+          title="عکس ساز"
+          subtitle="با وارد کردن مقادیر، پیش‌نمایش زنده می‌بینید و خروجی PNG یا JPG دانلود می‌کنید."
+          action={{
+            label: 'ذخیره تصویر',
+            icon: 'mingcute:download-2-line',
+            onClick: () => {
+              // This will be handled by ExportActions component
+              const exportButton = document.querySelector('[data-export-trigger]');
+              if (exportButton) exportButton.click();
+            },
+          }}
+        />
 
         <ExportActions exportRef={exportNodeRef} template={activeTemplate} />
 

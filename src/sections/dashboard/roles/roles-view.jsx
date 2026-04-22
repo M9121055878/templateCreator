@@ -1,10 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Container, Stack, Typography, Button, Card } from '@mui/material';
-import { Iconify } from 'src/components/iconify';
-import { RoleTable } from './role-table';
+
+import { Card, Container, Stack } from '@mui/material';
+
+import { PageHeader } from 'src/components/page-header';
+
 import { RoleCreateDialog } from './role-create-dialog';
+import { RoleTable } from './role-table';
 
 export function RolesView() {
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -17,23 +20,23 @@ export function RolesView() {
 
   return (
     <Container maxWidth="xl">
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">مدیریت نقش‌ها</Typography>
-        <Button
-          variant="contained"
-          color="inherit"
-          startIcon={<Iconify icon="mingcute:add-line" />}
-          onClick={() => setOpenCreateDialog(true)}
-        >
-          نقش جدید
-        </Button>
+      <Stack spacing={5}>
+        <PageHeader
+          title="نقش ها"
+          subtitle="مدیریت نقش‌ها و دسترسی‌ها"
+          action={{
+            label: 'نقش جدید',
+            icon: 'mingcute:add-line',
+            onClick: () => setOpenCreateDialog(true),
+          }}
+        />
+
+        <Card>
+          <RoleTable refreshKey={refreshKey} />
+        </Card>
+
+        <RoleCreateDialog open={openCreateDialog} onClose={() => setOpenCreateDialog(false)} onSuccess={handleCreateSuccess} />
       </Stack>
-
-      <Card>
-        <RoleTable refreshKey={refreshKey} />
-      </Card>
-
-      <RoleCreateDialog open={openCreateDialog} onClose={() => setOpenCreateDialog(false)} onSuccess={handleCreateSuccess} />
     </Container>
   );
 }

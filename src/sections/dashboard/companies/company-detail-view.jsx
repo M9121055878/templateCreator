@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
-import { Container, Stack, Typography, Button, Card, Box, IconButton } from '@mui/material';
+import { Container, Stack, Typography, Button, Card, Box } from '@mui/material';
+import { PageHeader } from 'src/components/page-header';
 import { Iconify } from 'src/components/iconify';
 import { GroupTable } from '../groups/group-table';
 import { GroupCreateDialog } from '../groups/group-create-dialog';
@@ -60,12 +61,12 @@ export function CompanyDetailView({ companySlug }) {
   return (
     <Container maxWidth="xl">
       <Stack spacing={4}>
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <IconButton onClick={() => router.push(paths.dashboard.companies)}>
-            <Iconify icon="mingcute:arrow-left-line" />
-          </IconButton>
-          <Typography variant="h4">جزئیات شرکت: {company.name}</Typography>
-        </Stack>
+        <PageHeader
+          title={`جزئیات شرکت: ${company.name}`}
+          backAction={{
+            onClick: () => router.push(paths.dashboard.companies),
+          }}
+        />
 
         <Card sx={{ p: 3 }}>
           <Stack spacing={2}>

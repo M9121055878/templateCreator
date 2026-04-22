@@ -1,10 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Container, Stack, Typography, Button, Card } from '@mui/material';
-import { Iconify } from 'src/components/iconify';
-import { CompanyTable } from './company-table';
+
+import { Card, Container, Stack } from '@mui/material';
+
+import { PageHeader } from 'src/components/page-header';
+
 import { CompanyCreateDialog } from './company-create-dialog';
+import { CompanyTable } from './company-table';
 
 export function CompaniesView() {
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
@@ -17,23 +20,23 @@ export function CompaniesView() {
 
   return (
     <Container maxWidth="xl">
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">مدیریت شرکت‌ها</Typography>
-        <Button
-          variant="contained"
-          color="inherit"
-          startIcon={<Iconify icon="mingcute:add-line" />}
-          onClick={() => setOpenCreateDialog(true)}
-        >
-          شرکت جدید
-        </Button>
+      <Stack spacing={5}>
+        <PageHeader
+          title="شرکت ها"
+          subtitle="مدیریت شرکت‌ها"
+          action={{
+            label: 'شرکت جدید',
+            icon: 'mingcute:add-line',
+            onClick: () => setOpenCreateDialog(true),
+          }}
+        />
+
+        <Card>
+          <CompanyTable refreshKey={refreshKey} />
+        </Card>
+
+        <CompanyCreateDialog open={openCreateDialog} onClose={() => setOpenCreateDialog(false)} onSuccess={handleCreateSuccess} />
       </Stack>
-
-      <Card>
-        <CompanyTable refreshKey={refreshKey} />
-      </Card>
-
-      <CompanyCreateDialog open={openCreateDialog} onClose={() => setOpenCreateDialog(false)} onSuccess={handleCreateSuccess} />
     </Container>
   );
 }

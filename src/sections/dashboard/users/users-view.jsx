@@ -1,8 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, Box, Button, Container, Typography, Stack, IconButton } from '@mui/material';
-import { Iconify } from 'src/components/iconify';
+
+import { Card, Container, Stack } from '@mui/material';
+
+import { PageHeader } from 'src/components/page-header';
+
 import { UserCreateDialog } from './user-create-dialog';
 import { UserTable } from './user-table';
 
@@ -17,23 +20,23 @@ export function UsersView() {
 
   return (
     <Container maxWidth="xl">
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">مدیریت کاربران</Typography>
-        <Button
-          variant="contained"
-          color="inherit"
-          startIcon={<Iconify icon="mingcute:add-line" />}
-          onClick={() => setOpenCreateDialog(true)}
-        >
-          کاربر جدید
-        </Button>
+      <Stack spacing={5}>
+        <PageHeader
+          title="کاربران"
+          subtitle="مدیریت کاربران سیستم"
+          action={{
+            label: 'کاربر جدید',
+            icon: 'mingcute:add-line',
+            onClick: () => setOpenCreateDialog(true),
+          }}
+        />
+
+        <Card>
+          <UserTable refreshKey={refreshKey} />
+        </Card>
+
+        <UserCreateDialog open={openCreateDialog} onClose={() => setOpenCreateDialog(false)} onSuccess={handleCreateSuccess} />
       </Stack>
-
-      <Card>
-        <UserTable refreshKey={refreshKey} />
-      </Card>
-
-      <UserCreateDialog open={openCreateDialog} onClose={() => setOpenCreateDialog(false)} onSuccess={handleCreateSuccess} />
     </Container>
   );
 }

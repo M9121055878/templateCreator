@@ -4,8 +4,13 @@ import { useMemo, useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 import { DashboardContent } from 'src/layouts/dashboard';
+import { PageHeader } from 'src/components/page-header';
+import { Iconify } from 'src/components/iconify';
 import { createEditorStore } from 'src/features/templates/editor/state/editor-store';
 import { mapDslToEditorState } from 'src/features/templates/editor/adapters/dsl-to-editor';
 import { mapEditorStateToDsl } from 'src/features/templates/editor/adapters/editor-to-dsl';
@@ -15,7 +20,6 @@ import { toast } from 'src/components/snackbar';
 
 import {
   Canvas,
-  Toolbar,
   LeftPanel,
   RightPanel,
   ImportDialog,
@@ -51,6 +55,7 @@ export function ThemeBuilderView() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [menuAnchor, setMenuAnchor] = useState(null);
 
   const [importDialogOpen, setImportDialogOpen] = useState(false);
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
@@ -396,20 +401,64 @@ export function ThemeBuilderView() {
   return (
     <DashboardContent maxWidth="xl" sx={{ px: { xs: 1, md: 2 } }}>
       <Stack spacing={2} sx={{ height: 'calc(100vh - 100px)', minHeight: 600 }}>
-        <Toolbar
-          document={document}
-          dirty={dirty}
-          isSaving={isSaving}
-          activeTemplateId={activeTemplateId}
-          validationErrors={validationErrors}
-          onSave={handleSave}
-          onImport={() => setImportDialogOpen(true)}
-          onExportActive={handleExportActive}
-          onExportAll={handleExportAll}
-          onCreate={handleCreate}
-          onDuplicate={handleDuplicate}
-          onDelete={handleDelete}
+        <PageHeader
+          title="تم ساز"
+          subtitle={document?.meta?.title || 'بدون عنوان'}
+          action={{
+            label: 'ساخت تم جدید',
+            icon: 'mingcute:add-line',
+            onClick: handleCreate,
+          }}
         />
+
+        {/* Secondary Actions Menu */}
+        <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<Iconify icon="mingcute:save-line" />}
+            onClick={handleSave}
+            disabled={!dirty || isSaving || !document || validationErrors.length > 0}
+          >
+            {isSaving ? 'در حال ذخیره...' : 'ذخیره'}
+          </Button>
+          
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<Iconify icon="mingcute:more-2-line" />}
+            onClick={(e) => setMenuAnchor(e.currentTarget)}
+          >
+            سایر عملیات
+          </Button>
+
+          <Menu
+            anchorEl={menuAnchor}
+            open={Boolean(menuAnchor)}
+            onClose={() => setMenuAnchor(null)}
+          >
+            <MenuItem onClick={() => { setImportDialogOpen(true); setMenuAnchor(null); }}>
+              <Iconify icon="mingcute:upload-line" sx={{ mr: 1 }} />
+              ایمپورت
+            </MenuItem>
+            <MenuItem onClick={() => { handleExportActive(); setMenuAnchor(null); }} disabled={!activeTemplateId}>
+              <Iconify icon="mingcute:download-line" sx={{ mr: 1 }} />
+              اکسپورت فعال
+            </MenuItem>
+            <MenuItem onClick={() => { handleExportAll(); setMenuAnchor(null); }}>
+              <Iconify icon="mingcute:download-line" sx={{ mr: 1 }} />
+              اکسپورت همه
+            </MenuItem>
+            <MenuItem onClick={() => { handleDuplicate(); setMenuAnchor(null); }} disabled={!activeTemplateId}>
+              <Iconify icon="mingcute:copy-line" sx={{ mr: 1 }} />
+              کپی
+            </MenuItem>
+            <MenuItem onClick={() => { handleDelete(); setMenuAnchor(null); }} disabled={!activeTemplateId} sx={{ color: 'error.main' }}>
+              <Iconify icon="mingcute:delete-line" sx={{ mr: 1 }} />
+              پاک کردن
+            </MenuItem>
+          </Menu>
+        </Stack>
 
         <Box
           sx={{

@@ -1,9 +1,15 @@
 'use client';
 
-import { useRouter } from 'src/routes/hooks';
-import { Container, Stack, Typography, Box, Card, CardContent, Button, Grid } from '@mui/material';
+import { useState } from 'react';
+
+import { Box, Button, Card, CardContent, Container, Grid, Stack, Typography } from '@mui/material';
+
 import { Iconify } from 'src/components/iconify';
+import { PageHeader } from 'src/components/page-header';
+
 import { useAuthContext } from 'src/auth/hooks/use-auth-context';
+
+import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 
 export function DashboardView() {
@@ -107,12 +113,17 @@ export function DashboardView() {
   return (
     <Container maxWidth="xl">
       <Stack spacing={4}>
-        <Box>
-          <Typography variant="h3">داشبورد</Typography>
-          <Typography variant="body2" color="text.secondary">
-            به داشبورد خوش آمدید
-          </Typography>
-        </Box>
+        <PageHeader
+          title="داشبورد"
+          subtitle="به داشبورد خوش آمدید"
+          action={{
+            label: 'خروج از حساب کاربری',
+            icon: 'mingcute:exit-line',
+            variant: 'outlined',
+            color: 'error',
+            onClick: () => router.push('/auth/jwt/sign-in'),
+          }}
+        />
 
         <Box>
           <Typography variant="h5" sx={{ mb: 3 }}>

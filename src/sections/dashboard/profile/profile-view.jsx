@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'src/routes/hooks';
 import { Container, Stack, Typography, Card, Box, TextField, Button, Alert, Divider } from '@mui/material';
+import { PageHeader } from 'src/components/page-header';
 import { useAuthContext } from 'src/auth/hooks/use-auth-context';
 import axios from 'src/lib/axios';
 
@@ -71,9 +72,18 @@ export function ProfileView() {
   return (
     <Container maxWidth="sm">
       <Stack spacing={3}>
-        <div>
-          <Typography variant="h4">پروفایل کاربری</Typography>
-        </div>
+        <PageHeader
+          title="پروفایل"
+          subtitle="مشاهده و ویرایش اطلاعات حساب کاربری"
+          action={{
+            label: 'خروج از حساب کاربری',
+            icon: 'mingcute:exit-line',
+            variant: 'outlined',
+            color: 'error',
+            onClick: handleLogout,
+            disabled: loadingLogout,
+          }}
+        />
 
         <Card sx={{ p: 3 }}>
           <Stack spacing={3}>
@@ -167,21 +177,6 @@ export function ProfileView() {
               {loading ? 'در حال تغییر...' : 'تغییر رمز عبور'}
             </Button>
           </Box>
-        </Card>
-
-        <Card sx={{ p: 3 }}>
-          <Typography variant="h6" sx={{ mb: 3 }}>
-            خروج از حساب کاربری
-          </Typography>
-          <Button
-            variant="outlined"
-            color="error"
-            fullWidth
-            disabled={loadingLogout}
-            onClick={handleLogout}
-          >
-            {loadingLogout ? 'در حال خروج...' : 'خروج'}
-          </Button>
         </Card>
       </Stack>
     </Container>
